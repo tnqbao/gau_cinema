@@ -61,36 +61,35 @@ const ListFilm = ({ category, limit, apiURL, page, onPageChange, DOMAIN_API }) =
 
   return (
     <div>
-      <hr />
-      <h2 className="font-bold text-center text-zinc-50">{category}</h2>
-      <hr />
-      <div className="flex flex-wrap gap-5 justify-between items-center">
+      
+      <div className=" border-2 border-double border-amber-500">
+      <div className="flex gap-1 flex-wrap justify-evenly items-center">
         {filmList.map((film) => (
           <FilmCard 
             key={film._id} 
             film={film} 
             DOMAIN_API={DOMAIN_API} 
-            og_image={film.og_image} 
             onClick={handleFilmClick} 
           />
         ))}
       </div>
       <br />
-      <hr />
       <br />
+      <hr></hr>
       <div className="flex justify-center border-solid-[#dba902]">
         {getPageNumbers().map((pageNumber) => (
           <button
             key={pageNumber}
             onClick={() => goToPage(pageNumber)}
-            className={pageNumber === page ? "bg-yellow-500 text-black" : "bg-gray-800 text-white"}
+            className={"flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold " + (pageNumber === page ? "bg-[#dba902] text-black" : "bg-gray-800 text-white")}
           >
             {pageNumber}
           </button>
         ))}
       </div>
+      <hr></hr>
       <br />
-      <hr />
+      </div>
     </div>
   );
 };

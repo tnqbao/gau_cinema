@@ -4,7 +4,6 @@ import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import ListFilm from "./components/ListFilm";
 
-import logo from "./logo.svg";
 import "./App.css";
 
 function App() {
@@ -14,37 +13,13 @@ function App() {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [apiURL, setApiURL] = useState(
-    "{${DOMAIN_API}}/danh-sach/phim-moi-cap-nhat?page=1"
+    "https://ophim1.com/v1/api/home?page=1"
   );
-
-  const handleCategorySelect = (newCategory) => {
-    setCategory(newCategory);
-    setPage(1);
-    let url = "";
-    switch (newCategory) {
-      case "Phim Mới":
-        url = `${DOMAIN_API}/v1/api/danh-sach/phim-moi-cap-nhat?page=1`;
-        break;
-      case "Phim Lẻ":
-        url = `${DOMAIN_API}/v1/api/danh-sach/phim-le?page=1&limit=${limit}`;
-        break;
-      case "Phim Bộ":
-        url = `${DOMAIN_API}/v1/api/danh-sach/phim-bo?page=1&limit=${limit}`;
-        break;
-      case "Hoạt Hình":
-        url = `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh?page=1&limit=${limit}`;
-        break;
-      default:
-        url = `https://phimapi.com/danh-sach/phim-moi-cap-nhat?page=1&limit=${limit}`;
-        break;
-    }
-    setApiURL(url);
-  };
 
   const handleCategorySearch = (keyWords) => {
     setCategory(keyWords);
     setPage(1);
-    let url = `{${DOMAIN_API}}/v1/api/tim-kiem?keyword=${keyWords}&limit=${limit}`;
+    let url = `${DOMAIN_API}/v1/api/tim-kiem?keyword=${keyWords}&limit=${limit}`;
     setApiURL(url);
   };
 
@@ -58,6 +33,30 @@ function App() {
     setApiURL((prevURL) => prevURL.replace(/limit=\d+/, `limit=${newLimit}`));
   };
 
+  const handleCategorySelect = (newCategory) => {
+    setCategory(newCategory);
+    setPage(1);
+    let url = "";
+    switch (newCategory) {
+      case "Phim Mới":
+        url = "https://ophim1.com/v1/api/home?page=1";
+        break;
+      case "Phim Lẻ":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-le?page=1`;
+        break;
+      case "Phim Bộ":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-bo?page=1`;
+        break;
+      case "Hoạt Hình":
+        url = `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh?page=1`;
+        break;
+      default:
+        url = `${DOMAIN_API}/v1/api/home`;
+        break;
+    }
+    setApiURL(url);
+  };
+
   return (
     <div>
       <Router>
@@ -66,7 +65,7 @@ function App() {
           changeCategory={setCategory}
         />
         <Navbar onCategorySelect={handleCategorySelect} />
-        <div className="lg bg-black">
+        <div className="px-8 lg:px-16 bg-black">
           <Routes>
             <Route
               path="/"
