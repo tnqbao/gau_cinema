@@ -96,7 +96,7 @@ const FilmSlider = ({ categoryTitle, films, onFilmClick }) => {
             style={{
               gridTemplateColumns: `repeat(${filmsPerPage}, minmax(0, 1fr))`,
               transition: 'transform 0.5s ease',
-              transform: `translateX(-${(startIndex / films.length) * 100}%)`,
+              transform: `translateX(-${((0 / films.length)) * 100}%)`,
             }}
           >
             {displayedFilms.map((film) => (

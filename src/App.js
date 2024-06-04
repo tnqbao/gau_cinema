@@ -19,7 +19,9 @@ function App() {
   const [DOMAIN_API] = useState("https://ophim1.com");
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const [apiURL, setApiURL] = useState("https://ophim1.com/v1/api/home?page=1");
+  const [apiURL, setApiURL] = useState(
+    "https://ophim1.com/v1/api/danh-sach/phim-moi?page=1"
+  );
 
   const handleCategorySearch = (keyWords) => {
     setKeyWords(keyWords);
@@ -34,9 +36,6 @@ function App() {
     setPage(1);
     let url = "";
     switch (newCategory) {
-      case "Phim Mới":
-        url = `${DOMAIN_API}/v1/api/danh-sach/phim-sap-chieu?page=1`;
-        break;
       case "Phim Lẻ":
         url = `${DOMAIN_API}/v1/api/danh-sach/phim-le?page=1`;
         break;
@@ -46,11 +45,24 @@ function App() {
       case "Hoạt Hình":
         url = `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh?page=1`;
         break;
-      case "Tivi Shows":
+      case "TV Show":
         url = `${DOMAIN_API}/v1/api/danh-sach/tv-shows?page=1`;
         break;
+      case "Thuyết Minh":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh?page=1`;
+        break;
+      case "Lồng Tiếng":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-long-tieng?page=1`;
+        break;
+      case "Phim Sắp Chiếu":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-sap-chieu?page=1`;
+        break;
+      case "Phim Vietsub":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-vietsub?page=1`;
+        break;
+
       default:
-        url = `${DOMAIN_API}/v1/api/home`;
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-moi?page=1`;
         break;
     }
     setApiURL(url);
@@ -87,6 +99,7 @@ function App() {
                   page={page}
                   DOMAIN_API={DOMAIN_API}
                   onPageChange={handlePageChange}
+                  onCategorySelect={handleCategorySelect}
                 />
               }
             />

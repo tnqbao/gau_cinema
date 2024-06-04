@@ -17,7 +17,6 @@ const ListFilm = ({
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
-
   useEffect(() => {
     if (category) {
       const fetchData = async () => {
@@ -26,9 +25,18 @@ const ListFilm = ({
         setError(null);
         try {
           const response = await axios.get(apiURL);
-          if (response.data && response.data.data && Array.isArray(response.data.data.items)) {
+          if (
+            response.data &&
+            response.data.data &&
+            Array.isArray(response.data.data.items)
+          ) {
             setFilmList(response.data.data.items);
-            setTotalPages(response.data.data.total_pages);
+            setTotalPages(
+              Math.ceil(
+                response.data.data.params.pagination.totalItems /
+                  response.data.data.params.pagination.totalItemsPerPage
+              ) || 1
+            );
           } else {
             setFilmList([]);
             setError("Unexpected data format");
@@ -52,19 +60,20 @@ const ListFilm = ({
   };
 
   const getPageNumbers = () => {
-    if (totalPages <= 10) {
+    let arr = [];
+
+    if (totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
+    } else if (page === 1) {
+      return [1, 2, 3, "...", totalPages];
+    } else if (page >= totalPages) {
+      return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+    } else if (page <= totalPages / 2) {
+      return [page - 1, page, page + 1, "...", totalPages];
+    } else if (page > totalPages / 2) {
+      return [1, "...", page - 1, page, page + 1];
     }
-
-    if (page <= 5) {
-      return Array.from({ length: 9 }, (_, i) => i + 1);
-    }
-
-    if (page > totalPages - 4) {
-      return Array.from({ length: 9 }, (_, i) => totalPages - 9 + i);
-    }
-
-    return Array.from({ length: 9 }, (_, i) => page - 4 + i);
+    return arr;
   };
 
   const fetchCategories = async () => {
@@ -74,7 +83,10 @@ const ListFilm = ({
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
       { name: "animation", url: `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh` },
-      { name: "dubbed", url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh` },
+      {
+        name: "dubbed",
+        url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh`,
+      },
     ];
 
     try {
@@ -84,7 +96,11 @@ const ListFilm = ({
 
       const filmsData = responses.reduce((acc, response, index) => {
         const categoryName = categories[index].name;
-        if (response.data && response.data.data && Array.isArray(response.data.data.items)) {
+        if (
+          response.data &&
+          response.data.data &&
+          Array.isArray(response.data.data.items)
+        ) {
           acc[categoryName] = response.data.data.items;
         } else {
           acc[categoryName] = [];
@@ -114,6 +130,14 @@ const ListFilm = ({
     </div>
   );
 
+  const categories = [
+    { name: "Phim Mới Cập Nhật", value: "newReleases" },
+    { name: "Phim Lẻ", value: "movies" },
+    { name: "Phim Bộ", value: "series" },
+    { name: "Hoạt Hình", value: "animation" },
+    { name: "Phim Thuyết Minh", value: "dubbed" },
+  ];
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -140,48 +164,57 @@ const ListFilm = ({
     <div className="bg-[#121111]">
       <br />
       <br />
-      <h1 className="font-bold text-center text-zinc-50 text-4xl font-serif">
+      <h1 className="font-bold text-center text-zinc-50 text-4xl font-semibold ">
         {category}
       </h1>
       <br />
+      <div className="flex justify-center border-solid-[#dba902]">
+        <button
+          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white "
+          onClick={() => onPageChange(page - 1)}
+          disabled={page === 1}
+        >
+          Trang Trước
+        </button>
+        {getPageNumbers().map((pageNumber) => (
+          <button
+            key={pageNumber}
+            disabled={pageNumber === "..."}
+            onClick={() => {
+              if (pageNumber !== "...") {
+                goToPage(pageNumber);
+              }
+            }}
+            className={
+              "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold " +
+              (pageNumber === page
+                ? "bg-[#dba902] text-black"
+                : "bg-gray-800 text-white hidden md:block")
+            }
+          >
+            {pageNumber}
+          </button>
+        ))}
+        <button
+          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white"
+          onClick={() => onPageChange(page + 1)}
+          disabled={page >= totalPages}
+        >
+          Trang Sau
+        </button>
+      </div>
       <div className="border-2 border-double border-amber-500">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {Array.isArray(filmList) && filmList.map((film) => (
-            <FilmCard
-              key={film._id}
-              film={film}
-              DOMAIN_API={DOMAIN_API}
-              onClick={() => handleFilmClick(film)}
-            />
-          ))}
+          {Array.isArray(filmList) &&
+            filmList.map((film) => (
+              <FilmCard
+                key={film._id}
+                film={film}
+                DOMAIN_API={DOMAIN_API}
+                onClick={() => handleFilmClick(film)}
+              />
+            ))}
         </div>
-        <br />
-        <br />
-        <hr />
-        <div className="flex justify-center border-solid-[#dba902]">
-          <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>
-            Previous
-          </button>
-          <span>{page}</span>
-          <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>
-            Next
-          </button>
-          {getPageNumbers().map((pageNumber) => (
-            <button
-              key={pageNumber}
-              onClick={() => goToPage(pageNumber)}
-              className={
-                "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold " +
-                (pageNumber === page
-                  ? "bg-[#dba902] text-black"
-                  : "bg-gray-800 text-white")
-              }
-            >
-              {pageNumber}
-            </button>
-          ))}
-        </div>
-        <br />
       </div>
     </div>
   );
