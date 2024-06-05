@@ -99,7 +99,6 @@ function VideoPlayer({ DOMAIN_API }) {
 
   return (
     <div className="video-player">
-      <h2>Video Player</h2>
       <div ref={playerRef} style={{ width: '100%', height: '500px' }}></div>
     </div>
   );

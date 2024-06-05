@@ -27,6 +27,7 @@ const FilmCard = ({ film }) => {
           className="w-full h-full rounded-md object-cover object-center"
           src={`https://img.ophim.live/uploads/movies/${film.thumb_url}`}
           alt={film.name}
+          loading="lazy"
         />
         {film.quality && (
           <span className="absolute top-2 left-2 bg-red-600 text-black text-xs font-bold px-2 py-1 rounded">

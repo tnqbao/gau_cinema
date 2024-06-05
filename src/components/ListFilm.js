@@ -83,31 +83,24 @@ const ListFilm = ({
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
       { name: "animation", url: `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh` },
-      {
-        name: "dubbed",
-        url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh`,
-      },
+      { name: "dubbed", url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh` },
     ];
-
+  
     try {
-      const responses = await Promise.all(
-        categories.map((category) => axios.get(category.url))
-      );
-
-      const filmsData = responses.reduce((acc, response, index) => {
-        const categoryName = categories[index].name;
+      const filmsData = {};
+      for (let i = 0; i < categories.length; i++) {
+        const category = categories[i];
+        const response = await axios.get(category.url);
         if (
           response.data &&
           response.data.data &&
           Array.isArray(response.data.data.items)
         ) {
-          acc[categoryName] = response.data.data.items;
+          filmsData[category.name] = response.data.data.items;
         } else {
-          acc[categoryName] = [];
+          filmsData[category.name] = [];
         }
-        return acc;
-      }, {});
-
+      }
       setFilmList(filmsData);
       setLoading(false);
       setError(null);
@@ -116,6 +109,7 @@ const ListFilm = ({
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     if (!category) {
@@ -125,8 +119,8 @@ const ListFilm = ({
 
   const renderSlider = (title, films) => (
     <div className="mb-8">
-      <h2 className="text-2xl font-bold mb-4">{title}</h2>
-      <FilmSlider films={films.slice(0, 15)} DOMAIN_API={DOMAIN_API} />
+      <h2 className=" font-bold mb-4 text-yellow-500 text-3xl">{title}</h2>
+      <FilmSlider films={films} DOMAIN_API={DOMAIN_API} />
     </div>
   );
 
@@ -164,7 +158,7 @@ const ListFilm = ({
     <div className="bg-[#121111]">
       <br />
       <br />
-      <h1 className="font-bold text-center text-zinc-50 text-4xl font-semibold ">
+      <h1 className="font-bold text-center text-zinc-50 text-4xl  ">
         {category}
       </h1>
       <br />

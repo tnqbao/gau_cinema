@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import FilmCard from "./FilmCard";
 
-const FilmSlider = ({ categoryTitle, films, onFilmClick }) => {
+const FilmSlider = ({ categoryTitle, films = [], onFilmClick }) => {
   const [startIndex, setStartIndex] = useState(0);
   const [filmsPerPage, setFilmsPerPage] = useState(4);
   const [loopCount, setLoopCount] = useState(0);
-  const maxLoops = 3; 
+  const maxLoops = 3;
   const intervalRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
-        setFilmsPerPage(2); 
+        setFilmsPerPage(1);
       } else if (window.innerWidth < 1024) {
         setFilmsPerPage(3);
       } else {
-        setFilmsPerPage(4); 
+        setFilmsPerPage(4);
       }
     };
 
-    window.addEventListener('resize', handleResize);
-    handleResize(); 
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const FilmSlider = ({ categoryTitle, films, onFilmClick }) => {
     });
   };
 
-  const displayedFilms = films.slice(startIndex, startIndex + filmsPerPage);
+  const displayedFilms = films && films.length ? films.slice(startIndex, startIndex + filmsPerPage) : [];
 
   return (
     <div className="mb-8 relative">
@@ -95,8 +95,8 @@ const FilmSlider = ({ categoryTitle, films, onFilmClick }) => {
             className="grid grid-flow-col gap-4"
             style={{
               gridTemplateColumns: `repeat(${filmsPerPage}, minmax(0, 1fr))`,
-              transition: 'transform 0.5s ease',
-              transform: `translateX(-${((0 / films.length)) * 100}%)`,
+              transition: "transform 0.5s ease",
+              transform: `translateX(-${(0 / films.length) * 100}%)`,
             }}
           >
             {displayedFilms.map((film) => (

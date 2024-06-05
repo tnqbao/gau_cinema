@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  BrowserRouter as Router,
   Route,
   Routes,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
@@ -23,6 +23,8 @@ function App() {
     "https://ophim1.com/v1/api/danh-sach/phim-moi?page=1"
   );
 
+  const navigate = useNavigate();
+
   const handleCategorySearch = (keyWords) => {
     setKeyWords(keyWords);
     setCategory(keyWords);
@@ -36,6 +38,9 @@ function App() {
     setPage(1);
     let url = "";
     switch (newCategory) {
+      case "Trang Chủ":
+        url = `${DOMAIN_API}/v1/api/danh-sach/phim-moi?page=1`;
+        break;
       case "Phim Lẻ":
         url = `${DOMAIN_API}/v1/api/danh-sach/phim-le?page=1`;
         break;
@@ -60,12 +65,14 @@ function App() {
       case "Phim Vietsub":
         url = `${DOMAIN_API}/v1/api/danh-sach/phim-vietsub?page=1`;
         break;
-
       default:
         url = `${DOMAIN_API}/v1/api/danh-sach/phim-moi?page=1`;
         break;
     }
     setApiURL(url);
+    if (newCategory === "Trang Chủ") {
+      navigate("/");
+    }
   };
 
   const handlePageChange = (newPage) => {
@@ -73,47 +80,40 @@ function App() {
     setApiURL((prevURL) => prevURL.replace(/page=\d+/, `page=${newPage}`));
   };
 
-  const handleLimitChange = (newLimit) => {
-    setLimit(newLimit);
-    setApiURL((prevURL) => prevURL.replace(/limit=\d+/, `limit=${newLimit}`));
-  };
-
   return (
     <div className="flex min-h-screen flex-col bg-[#121111]">
-      <Router>
-        <Header
-          onCategorySearch={handleCategorySearch}
-          changeCategory={setCategory}
-        />
-        <Navbar onCategorySelect={handleCategorySelect} />
-        <ConditionalWrapper>
-          <Routes>
-            <Route path="/" element={<ListFilm DOMAIN_API={DOMAIN_API} />} />
-            <Route
-              path="/:category"
-              element={
-                <ListFilm
-                  category={category}
-                  limit={limit}
-                  apiURL={apiURL}
-                  page={page}
-                  DOMAIN_API={DOMAIN_API}
-                  onPageChange={handlePageChange}
-                  onCategorySelect={handleCategorySelect}
-                />
-              }
-            />
-            <Route
-              path="/film/:slug"
-              element={<FilmDetail DOMAIN_API={DOMAIN_API} />}
-            />
-            <Route
-              path="/watch/:slug"
-              element={<VideoPlayer DOMAIN_API={DOMAIN_API} />}
-            />
-          </Routes>
-        </ConditionalWrapper>
-      </Router>
+      <Header
+        onCategorySearch={handleCategorySearch}
+        changeCategory={setCategory}
+      />
+      <Navbar onCategorySelect={handleCategorySelect} />
+      <ConditionalWrapper>
+        <Routes>
+          <Route path="/" element={<ListFilm DOMAIN_API={DOMAIN_API} />} />
+          <Route
+            path="/:category"
+            element={
+              <ListFilm
+                category={category}
+                limit={limit}
+                apiURL={apiURL}
+                page={page}
+                DOMAIN_API={DOMAIN_API}
+                onPageChange={handlePageChange}
+                onCategorySelect={handleCategorySelect}
+              />
+            }
+          />
+          <Route
+            path="/film/:slug"
+            element={<FilmDetail DOMAIN_API={DOMAIN_API} />}
+          />
+          <Route
+            path="/phim/xem/:slug"
+            element={<VideoPlayer DOMAIN_API={DOMAIN_API} />}
+          />
+        </Routes>
+      </ConditionalWrapper>
     </div>
   );
 }
