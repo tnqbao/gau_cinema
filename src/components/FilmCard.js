@@ -40,7 +40,7 @@ const FilmCard = ({ film }) => {
           </span>
         )}
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black via-black/60 to-transparent">
+      <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black via-black/60 to-transparent">
         <div className="absolute bottom-2 left-2 right-2 text-white font-semibold text-xl">
           {displayName}
         </div>

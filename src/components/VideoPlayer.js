@@ -31,7 +31,7 @@ function VideoPlayer({ DOMAIN_API }) {
       setLoading(true);
       try {
         const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}?chapter=${chapter}`);
-        const episodeIndex = 0; // Change this if you want to fetch a specific episode
+        const episodeIndex = 0; 
         const videoLink = response.data.data.item.episodes[0].server_data[episodeIndex].link_m3u8; 
         if (videoLink) {
           setVideoUrl(videoLink);
