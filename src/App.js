@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from "react";
-import {
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import React, { useState } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import ListFilm from "./components/ListFilm";
 import FilmDetail from "./components/FilmDetail";
 import VideoPlayer from "./components/VideoPlayer";
-
 import "./App.css";
 
 function App() {
@@ -18,6 +12,7 @@ function App() {
   const [keyWords, setKeyWords] = useState("");
   const [DOMAIN_API] = useState("https://ophim1.com");
   const [limit, setLimit] = useState(10);
+  const [ep, setEpisode] = useState(1);
   const [page, setPage] = useState(1);
   const [apiURL, setApiURL] = useState(
     "https://ophim1.com/v1/api/danh-sach/phim-moi?page=1"
@@ -28,6 +23,7 @@ function App() {
   const handleCategorySearch = (keyWords) => {
     setKeyWords(keyWords);
     setCategory(keyWords);
+    setEpisode(1);
     setPage(1);
     const url = `${DOMAIN_API}/v1/api/tim-kiem?keyword=${keyWords}&page=1`;
     setApiURL(url);
@@ -36,6 +32,7 @@ function App() {
   const handleCategorySelect = (newCategory) => {
     setCategory(newCategory);
     setPage(1);
+    setEpisode(1);
     let url = "";
     switch (newCategory) {
       case "Trang Chủ":
@@ -80,12 +77,14 @@ function App() {
     setApiURL((prevURL) => prevURL.replace(/page=\d+/, `page=${newPage}`));
   };
 
+  const handleEpisodeChange = (slug, episode, server) => {
+    setEpisode(episode)
+    navigate(`/movie/${slug}/watch?ep=${episode}&server=${server}`);
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-[#121111]">
-      <Header
-        onCategorySearch={handleCategorySearch}
-        changeCategory={setCategory}
-      />
+      <Header onCategorySearch={handleCategorySearch} changeCategory={setCategory} />
       <Navbar onCategorySelect={handleCategorySelect} />
       <ConditionalWrapper>
         <Routes>
@@ -104,13 +103,10 @@ function App() {
               />
             }
           />
+          <Route path="/film/:slug" element={<FilmDetail DOMAIN_API={DOMAIN_API} />} />
           <Route
-            path="/film/:slug"
-            element={<FilmDetail DOMAIN_API={DOMAIN_API} />}
-          />
-          <Route
-            path="/phim/xem/:slug"
-            element={<VideoPlayer DOMAIN_API={DOMAIN_API} />}
+            path="/movie/:slug/watch"
+            element={<VideoPlayer DOMAIN_API={DOMAIN_API} onEpisodeChange={handleEpisodeChange} ep={ep} />}
           />
         </Routes>
       </ConditionalWrapper>
@@ -120,11 +116,9 @@ function App() {
 
 const ConditionalWrapper = ({ children }) => {
   const location = useLocation();
-  const isVideoPlayerRoute = location.pathname.startsWith("/watch/");
+  const isVideoPlayerRoute = location.pathname.startsWith("/movie/");
 
-  return (
-    <div className={isVideoPlayerRoute ? "" : "px-8 lg:px-16"}>{children}</div>
-  );
+  return <div className={isVideoPlayerRoute ? "" : "px-8 lg:px-16"}>{children}</div>;
 };
 
 export default App;

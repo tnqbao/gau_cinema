@@ -1,6 +1,8 @@
+// src/components/FilmDetail.js
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import EpisodesList from "./EpisodesList"; // Import the EpisodesList component
 
 function FilmDetail({ DOMAIN_API }) {
   const { slug } = useParams();
@@ -22,7 +24,7 @@ function FilmDetail({ DOMAIN_API }) {
   }, [slug, DOMAIN_API]);
 
   const handleWatchClick = () => {
-    navigate(`/phim/xem/${slug}`);
+    navigate(`/movie/${slug}/watch`);
   };
 
   if (!film) {
@@ -38,9 +40,9 @@ function FilmDetail({ DOMAIN_API }) {
         </div>
         <div className="md:pt-20 relative overflow-hidden bg-[#121111]">
           <div className="absolute bg-cover h-full hidden md:block w-7/12 top-0 right-0">
-            <div className="flex h-[115%] w-ful absolute top-3/4 -left-[20%] -translate-y-2/3">
+            <div className="flex h-[115%] w-full absolute top-3/4 -left-[20%] -translate-y-2/3">
               <img
-                className="h-full aspect-video m-auto flex-shrink-0 w-full object-cover blur-sm "
+                className="h-full aspect-video m-auto flex-shrink-0 w-full object-cover blur-sm"
                 src={`https://img.ophim.live/uploads/movies/${film.item.poster_url}`}
                 alt={film.item.name}
               />
@@ -50,7 +52,7 @@ function FilmDetail({ DOMAIN_API }) {
             <div className="left-layer w-[150%] h-[120%] -left-[30%] -top-[10%]"></div>
           </div>
 
-          <div className="bg-cover h-full w-full mb-4 sm:absolute sm:max-w-[280px] sm:aspect-2/3 sm:right-28  ">
+          <div className="bg-cover h-full w-full mb-4 sm:absolute sm:max-w-[280px] sm:aspect-2/3 sm:right-28">
             <img
               className="w-full shadow-md"
               src={`https://img.ophim.live/uploads/movies/${film.item.thumb_url}`}
@@ -59,10 +61,10 @@ function FilmDetail({ DOMAIN_API }) {
             />
           </div>
           <div className="relative w-full md:w-5/12 top-0 right-0">
-            <h1 className="font-bold text-xl md:text-3xl mb-2  text-[#dba902]">
+            <h1 className="font-bold text-xl md:text-3xl mb-2 text-[#dba902]">
               {film.item.name}
             </h1>
-            <h2 className="font-thin text-lg md:text-2xl text-foreground/40 mb-5  text-slate-50">
+            <h2 className="font-thin text-lg md:text-2xl text-foreground/40 mb-5 text-slate-50">
               {film.item.origin_name}
             </h2>
             <div className="space-y-2 flex flex-col flex-wrap">
@@ -71,7 +73,10 @@ function FilmDetail({ DOMAIN_API }) {
                   ? film.breadCrumb
                       .slice(0, film.breadCrumb.length - 1)
                       .map((bred) => (
-                        <a className="bg-gray-600/30 text-white w-fit py-1 px-3 text-xs rounded-2xl">
+                        <a
+                          key={bred.position}
+                          className="bg-gray-600/30 text-white w-fit py-1 px-3 text-xs rounded-2xl"
+                        >
                           <span className="is-dark">{bred.name}</span>
                         </a>
                       ))
@@ -82,11 +87,10 @@ function FilmDetail({ DOMAIN_API }) {
                   <span className="text-foreground/50 text-[#dba902] text-lg">
                     Quốc gia:&nbsp;{" "}
                   </span>
-                  <span className="px-1 border-solid  text-slate-100 ">
+                  <span className="px-1 border-solid text-slate-100">
                     {film.item.country[0].name}
                   </span>
                 </li>
-                <p> </p>
                 <li className="space-x-1 ">
                   <span className="text-foreground/50 text-[#dba902] text-lg">
                     Thể loại:&nbsp;{" "}
@@ -120,11 +124,11 @@ function FilmDetail({ DOMAIN_API }) {
                 </li>
               </ul>
               <div className="space-x-3 flex w-full flex-wrap mt-3 border-r-slate-50 rounded-sm ">
-                <div className="with-title mt-8 dark::!border-white">
+                <div className="with-title mt-8 dark:!border-white">
                   <p className=" text-lg title !-mt-10 !bg-background text-[#dba902]">
                     Miêu tả
                   </p>
-                  <p className="  text-slate-100">
+                  <p className=" text-slate-100">
                     {hideContent
                       ? film.seoOnPage.descriptionHead
                       : film.item.content.startsWith("<p>")
@@ -138,23 +142,18 @@ function FilmDetail({ DOMAIN_API }) {
                     {hideContent ? "Hiển Thị Thêm" : "Ẩn Bớt"}
                   </button>
                 </div>
-                <br></br>
-                <button 
-                  className="bg-[#dba902] px-20 py-3 rounded-lg mt-5 mr-5 mb-5 "
-                  title="Xem tập mới nhất"
+                <br />
+                <button
+                  className="bg-[#dba902] px-20 py-3 rounded-lg w-full font-bold my-2"
                   onClick={handleWatchClick}
                 >
-                  <i className="nes-icon play size-1x"></i>
-                  <span className="text-lg font-bold">&nbsp;Xem Phim</span>
+                  Xem ngay
                 </button>
-                <div
-                  className="w-full md:w-max mt-3"
-                  v-if="!validChildData && seasonData?.titles.nodes.length"
-                ></div>
               </div>
             </div>
           </div>
         </div>
+        <EpisodesList episodes={film.episodes} slug={slug} /> {/* Add this line */}
       </div>
     </div>
   );
