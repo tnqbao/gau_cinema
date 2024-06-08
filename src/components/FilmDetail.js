@@ -38,8 +38,8 @@ function FilmDetail({ DOMAIN_API }) {
           <b></b>
           <i></i>
         </div>
-        <div className="md:pt-20 relative overflow-hidden bg-[#121111]">
-          <div className="absolute bg-cover h-full hidden md:block w-7/12 top-0 right-0">
+        <div className="lg:pt-20 relative overflow-hidden bg-[#121111]">
+          <div className="absolute bg-cover h-full hidden lg:block w-7/12 top-0 right-0">
             <div className="flex h-[115%] w-full absolute top-3/4 -left-[20%] -translate-y-2/3">
               <img
                 className="h-full aspect-video m-auto flex-shrink-0 w-full object-cover blur-sm"
@@ -144,7 +144,7 @@ function FilmDetail({ DOMAIN_API }) {
                 </div>
                 <br />
                 <button
-                  className="bg-[#dba902] px-20 py-3 rounded-lg w-full font-bold my-2"
+                  className="bg-[#dba902] px-20 py-3 rounded-lg w-full font-bold my-2 hover:bg-[#186e5c] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
                   onClick={handleWatchClick}
                 >
                   Xem ngay
@@ -153,7 +153,7 @@ function FilmDetail({ DOMAIN_API }) {
             </div>
           </div>
         </div>
-        <EpisodesList episodes={film.episodes} slug={slug} /> {/* Add this line */}
+        <EpisodesList episodes={film.episodes} slug={slug} /> 
       </div>
     </div>
   );

@@ -83,9 +83,12 @@ const ListFilm = ({
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
       { name: "animation", url: `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh` },
-      { name: "dubbed", url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh` },
+      {
+        name: "dubbed",
+        url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh`,
+      },
     ];
-  
+
     try {
       const filmsData = {};
       for (let i = 0; i < categories.length; i++) {
@@ -109,7 +112,6 @@ const ListFilm = ({
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     if (!category) {
@@ -164,7 +166,7 @@ const ListFilm = ({
       <br />
       <div className="flex justify-center border-solid-[#dba902]">
         <button
-          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white "
+          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 "
           onClick={() => onPageChange(page - 1)}
           disabled={page === 1}
         >
@@ -180,17 +182,17 @@ const ListFilm = ({
               }
             }}
             className={
-              "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold " +
+              "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold  relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
               (pageNumber === page
                 ? "bg-[#dba902] text-black"
-                : "bg-gray-800 text-white hidden md:block")
+                : "bg-gray-800 text-white hidden md:block hover:bg-[#2c3f3b]")
             }
           >
             {pageNumber}
           </button>
         ))}
         <button
-          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white"
+          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 hover:bg-[#2c3f3b]"
           onClick={() => onPageChange(page + 1)}
           disabled={page >= totalPages}
         >

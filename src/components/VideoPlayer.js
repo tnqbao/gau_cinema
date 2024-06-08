@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Artplayer from "artplayer";
@@ -20,7 +20,7 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
   const playerRef = useRef(null);
   const artRef = useRef(null);
 
-  const playM3u8 = (video, url, art) => {
+  const playM3u8 = useCallback((video, url, art) => {
     if (Hls.isSupported()) {
       if (art.hls) art.hls.destroy();
       const hls = new Hls();
@@ -33,49 +33,46 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
     } else {
       art.notice.show = "Unsupported playback format: m3u8";
     }
-  };
+  }, []);
+
+  const fetchFilm = useCallback(async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
+      setFilm(response.data);
+      const episodes = response.data.data.item.episodes;
+      const selectedEpisode = episodes.find((ep) =>
+        ep.server_data.find((srv) => srv.name === episode)
+      );
+      const videoLink =
+        response.data.data.item.episodes[0].server_data.length > 1
+          ? response.data.data.item.episodes[0].server_data.find(
+              (ep) => ep.name === episode
+            ).link_m3u8
+          : response.data.data.item.episodes[0].server_data[0].name.length > 0
+          ? response.data.data.item.episodes[0].server_data[0].link_m3u8
+          : response.data.data.trailer_url;
+      if (videoLink) {
+        setVideoUrl(videoLink);
+        setError(null);
+      } else {
+        setError("Video not found");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 404) {
+        setError("404 Not Found. Retrying...");
+        setTimeout(fetchFilm, 1000);
+      } else {
+        setError("Error fetching film data: " + error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [DOMAIN_API, slug, episode, server]);
 
   useEffect(() => {
-    const fetchFilm = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
-        setFilm(response.data);
-        const videoLink =
-          response.data.data.item.episodes[0].server_data.length > 1
-            ? response.data.data.item.episodes[0].server_data.find(
-                (ep) => ep.name === episode
-              ).link_m3u8
-            : response.data.data.item.episodes[0].server_data[0].name.length > 0
-            ? response.data.data.item.episodes[0].server_data[0].link_m3u8
-            : response.data.data.trailer_url;
-
-        if (videoLink) {
-          setVideoUrl(videoLink);
-          setError(null);
-        } else {
-          const trailerUrl = response.data.data.trailer_url;
-          if (trailerUrl) {
-            setVideoUrl(trailerUrl);
-            setError(null);
-          } else {
-            setError("Video not found");
-          }
-        }
-      } catch (error) {
-        if (error.response && error.response.status === 404) {
-          setError("404 Not Found. Retrying...");
-          setTimeout(fetchFilm, 1000);
-        } else {
-          setError("Error fetching film data: " + error.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFilm();
-  }, [slug, DOMAIN_API, server, episode]);
+  }, [fetchFilm]);
 
   useEffect(() => {
     if (videoUrl && playerRef.current) {
@@ -119,19 +116,32 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
         networkMonitor: true,
         controls: [
           {
-            name: "your-button",
-            index: 100,
+            name: "next-episode",
+            index: 15,
             position: "left",
-            html: "Về Tập Trước",
-            tooltip: "Your Button",
+            html: `<svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-id-13"></use><path class="ytp-svg-fill" d="M 12,24 20.5,18 12,12 V 24 z M 22,12 v 12 h 2 V 12 h -2 z" id="ytp-id-13"></path></svg>`,
+            tooltip: "Next Episode",
             style: {
               color: "white",
             },
-            click: function (...args) {
-              // if(ep>1) onEpisodeChange
+
+            click: () => {
+              const currentEpisode = parseInt(episode);
+              const totalEpisodes = film.data.item.episodes[0].server_data.length;
+              console.log(currentEpisode);
+              console.log(totalEpisodes);
+              if (currentEpisode < totalEpisodes) {
+                const nextEpisode = currentEpisode + 1;
+                onEpisodeChange(slug, nextEpisode, server);
+              }
             },
-            mounted: function (...args) {
-              console.info("mounted", args);
+            mounted: () => {
+              const currentEpisode = ep;
+              const totalEpisodes = film.data.item.episodes.length;
+              if (currentEpisode < totalEpisodes) {
+                const nextEpisode = currentEpisode + 1;
+                onEpisodeChange(slug, nextEpisode, server);
+              }
             },
           },
         ],
@@ -147,7 +157,16 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
         art.destroy(true);
       };
     }
-  }, [videoUrl, slug]);
+  }, [
+    videoUrl,
+    slug,
+    episode,
+    server,
+    navigate,
+    playM3u8,
+    film,
+    onEpisodeChange,
+  ]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -159,8 +178,15 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
 
   return (
     <div className="video-player">
-      <h1 className="">{ep}</h1>
-      <div className="" ref={playerRef} style={{ width: "100%", height: "600px" }}></div>
+      <h1 className="text-center justify-center font-bold text-amber-400 p-1 text-4xl mt-5">
+        {film.data.item.name + " - Tập " + ep}
+      </h1>
+      <div className="relative w-full pt-[56.25%] flex justify-center p-5">
+        <div
+          ref={playerRef}
+          className="absolute inset-0 w-full h-full p-9"
+        ></div>
+      </div>
       {film && (
         <EpisodesList
           episodes={film.data.item.episodes}
