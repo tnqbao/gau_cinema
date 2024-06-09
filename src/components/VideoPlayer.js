@@ -4,6 +4,7 @@ import axios from "axios";
 import Artplayer from "artplayer";
 import Hls from "hls.js";
 import EpisodesList from "./EpisodesList";
+import FilmDetail from "./FilmDetail";
 
 function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
   const { slug } = useParams();
@@ -127,7 +128,8 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
 
             click: () => {
               const currentEpisode = parseInt(episode);
-              const totalEpisodes = film.data.item.episodes[0].server_data.length;
+              const totalEpisodes =
+                film.data.item.episodes[0].server_data.length;
               console.log(currentEpisode);
               console.log(totalEpisodes);
               if (currentEpisode < totalEpisodes) {
@@ -186,6 +188,7 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
           ref={playerRef}
           className="absolute inset-0 w-full h-full p-9"
         ></div>
+        //
       </div>
       {film && (
         <EpisodesList
@@ -195,6 +198,7 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
           ep={ep}
         />
       )}
+     
     </div>
   );
 }

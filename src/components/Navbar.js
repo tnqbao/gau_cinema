@@ -27,10 +27,10 @@ const Navbar = ({ onCategorySelect }) => {
         ? "/"
         : `/${selectedCategory.replace(/\s+/g, "-").toLowerCase()}`
     );
-    setMenuOpen(false); 
+    setMenuOpen(false);
     const topMenu = document.getElementById("top-menu");
     if (topMenu) {
-      topMenu.classList.add("hidden"); 
+      topMenu.classList.add("hidden");
     }
   };
 
@@ -55,13 +55,18 @@ const Navbar = ({ onCategorySelect }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const topMenu = document.getElementById("top-menu");
+    if (topMenu) {
+      topMenu.classList.add("hidden");
+    }
+  }, []);
+
   return (
     <div className="relative flex gap-5 justify-between items-center bg-[#202020] w-full">
       <ul
         id="top-menu"
-        className={`md:flex items-center gap-y-3 gap-x-1${
-          menuOpen ? "flex" : "hidden"
-        } flex-wrap md:flex`}
+        className={`lg:flex items-center gap-y-3 gap-x-1 flex-wrap ${menuOpen ? "flex" : "hidden"}`}
       >
         {categoryList.map((cate) => (
           <li key={cate} className="top-menu-icon p-1">
@@ -77,7 +82,7 @@ const Navbar = ({ onCategorySelect }) => {
           </li>
         ))}
       </ul>
-      <div className="md:hidden p-5 hover:bg-[#2c3f3b]">
+      <div className="lg:hidden p-5 hover:bg-[#2c3f3b]">
         <svg
           id="toggleTopMenuIcon"
           xmlns="http://www.w3.org/2000/svg"

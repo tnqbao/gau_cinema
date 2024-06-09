@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import ListFilm from "./components/ListFilm";
 import FilmDetail from "./components/FilmDetail";
 import VideoPlayer from "./components/VideoPlayer";
+import Footer from "./components/Footer";
 import "./App.css";
 
 function App() {
@@ -110,6 +111,7 @@ function App() {
           />
         </Routes>
       </ConditionalWrapper>
+      <Footer></Footer>
     </div>
   );
 }
