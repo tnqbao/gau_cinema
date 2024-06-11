@@ -66,7 +66,9 @@ const Navbar = ({ onCategorySelect }) => {
     <div className="relative flex gap-5 justify-between items-center bg-[#202020] w-full">
       <ul
         id="top-menu"
-        className={`lg:flex items-center gap-y-3 gap-x-1 flex-wrap ${menuOpen ? "flex" : "hidden"}`}
+        className={`lg:flex items-center gap-y-3 gap-x-1 flex-wrap ${
+          menuOpen ? "flex" : "hidden"
+        }`}
       >
         {categoryList.map((cate) => (
           <li key={cate} className="top-menu-icon p-1">
@@ -82,9 +84,8 @@ const Navbar = ({ onCategorySelect }) => {
           </li>
         ))}
       </ul>
-      <div className="lg:hidden p-5 hover:bg-[#2c3f3b]">
+      <div  id="toggleTopMenuIcon" className="lg:hidden p-5 hover:bg-[#2c3f3b]">
         <svg
-          id="toggleTopMenuIcon"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"

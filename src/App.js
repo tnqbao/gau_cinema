@@ -10,7 +10,7 @@ import "./App.css";
 
 function App() {
   const [category, setCategory] = useState("Trang Chủ");
-  const [keyWords, setKeyWords] = useState("");
+  const [keyWord, setKeyWords] = useState("");
   const [DOMAIN_API] = useState("https://ophim1.com");
   const [limit, setLimit] = useState(10);
   const [ep, setEpisode] = useState(1);
@@ -22,6 +22,7 @@ function App() {
   const navigate = useNavigate();
 
   const handleCategorySearch = (keyWords) => {
+    if (!keyWords) keyWords = keyWord;
     setKeyWords(keyWords);
     setCategory(keyWords);
     setEpisode(1);
