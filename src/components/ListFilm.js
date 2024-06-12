@@ -146,9 +146,13 @@ const ListFilm = ({
   }
 
   if (error) {
-    return <div className="flex justify-center items-center p-52 ">
-      <h1 className="animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 ">{error}</h1>
-    </div>;
+    return (
+      <div className="flex justify-center items-center p-52">
+        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+          {error}
+        </h1>
+      </div>
+    );
   }
 
   if (!category) {

@@ -171,11 +171,17 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
   ]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center p-52">
+        {" "}
+        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">Loading...</h1>
+      </div>
+    );
   }
 
   if (error && !videoUrl) {
-    return <div>{error}</div>;
+    return <div className="flex justify-center items-center p-52">
+      <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200" >Phim Chưa Cập Nhật</h1></div>;
   }
 
   return (
@@ -186,7 +192,7 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
       <div className="relative w-full pt-[56.25%] flex justify-center p-5">
         <div
           ref={playerRef}
-          className="absolute inset-0 w-full h-full p-9"
+          className="absolute inset-0 w-full h-full lg:p-9"
         ></div>
         //
       </div>
@@ -198,7 +204,6 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
           ep={ep}
         />
       )}
-     
     </div>
   );
 }
