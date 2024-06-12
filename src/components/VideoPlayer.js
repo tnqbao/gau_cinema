@@ -1,12 +1,18 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Artplayer from "artplayer";
 import Hls from "hls.js";
+import { GlobalContext } from "../context/GlobalContext";
 import EpisodesList from "./EpisodesList";
-import FilmDetail from "./FilmDetail";
 
-function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
+function VideoPlayer() {
+  const {
+    DOMAIN_API,
+    handleEpisodeChange,
+    ep,
+  } = useContext(GlobalContext);
+  
   const { slug } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -46,13 +52,12 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
         ep.server_data.find((srv) => srv.name === episode)
       );
       const videoLink =
-        response.data.data.item.episodes[0].server_data.length > 1
-          ? response.data.data.item.episodes[0].server_data.find(
-              (ep) => ep.name === episode
+        selectedEpisode.server_data.length > 1
+          ? selectedEpisode.server_data.find(
+              (srv) => srv.name === episode
             ).link_m3u8
-          : response.data.data.item.episodes[0].server_data[0].name.length > 0
-          ? response.data.data.item.episodes[0].server_data[0].link_m3u8
-          : response.data.data.trailer_url;
+          : selectedEpisode.server_data[0].link_m3u8;
+
       if (videoLink) {
         setVideoUrl(videoLink);
         setError(null);
@@ -69,7 +74,7 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
     } finally {
       setLoading(false);
     }
-  }, [DOMAIN_API, slug, episode, server]);
+  }, [DOMAIN_API, slug, episode]);
 
   useEffect(() => {
     fetchFilm();
@@ -125,24 +130,21 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
             style: {
               color: "white",
             },
-
             click: () => {
               const currentEpisode = parseInt(episode);
               const totalEpisodes =
                 film.data.item.episodes[0].server_data.length;
-              console.log(currentEpisode);
-              console.log(totalEpisodes);
               if (currentEpisode < totalEpisodes) {
                 const nextEpisode = currentEpisode + 1;
-                onEpisodeChange(slug, nextEpisode, server);
+                handleEpisodeChange(slug, nextEpisode, server);
               }
             },
             mounted: () => {
-              const currentEpisode = ep;
+              const currentEpisode = parseInt(episode);
               const totalEpisodes = film.data.item.episodes.length;
               if (currentEpisode < totalEpisodes) {
                 const nextEpisode = currentEpisode + 1;
-                onEpisodeChange(slug, nextEpisode, server);
+                handleEpisodeChange(slug, nextEpisode, server);
               }
             },
           },
@@ -167,21 +169,27 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
     navigate,
     playM3u8,
     film,
-    onEpisodeChange,
+    handleEpisodeChange,
   ]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center p-52">
-        {" "}
-        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">Loading...</h1>
+        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+          Loading...
+        </h1>
       </div>
     );
   }
 
   if (error && !videoUrl) {
-    return <div className="flex justify-center items-center p-52">
-      <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200" >Phim Chưa Cập Nhật</h1></div>;
+    return (
+      <div className="flex justify-center items-center p-52">
+        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+          Phim Chưa Cập Nhật
+        </h1>
+      </div>
+    );
   }
 
   return (
@@ -194,13 +202,12 @@ function VideoPlayer({ DOMAIN_API, onEpisodeChange, ep }) {
           ref={playerRef}
           className="absolute inset-0 w-full h-full lg:p-9"
         ></div>
-        //
       </div>
       {film && (
         <EpisodesList
           episodes={film.data.item.episodes}
           slug={slug}
-          onEpisodeChange={onEpisodeChange}
+          handleEpisodeChange={handleEpisodeChange}
           ep={ep}
         />
       )}

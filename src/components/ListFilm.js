@@ -1,22 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import React, { useState, useEffect, useCallback, useContext } from "react";
+import { VariableSizeGrid as Grid } from "react-window";
+import { GlobalContext } from "../context/GlobalContext";
 import FilmCard from "./FilmCard";
 import FilmSlider from "./FilmSlider";
-import React, { useState, useEffect, useCallback } from "react";
+import useWindowSize from '../hooks/useWindowSize';  
 
-const ListFilm = ({
-  category,
-  limit,
-  apiURL,
-  page,
-  onPageChange,
-  DOMAIN_API,
-}) => {
+const ListFilm = () => {
+  const { category, apiURL, DOMAIN_API, limit, page, handlePageChange } =
+    useContext(GlobalContext);
   const [filmList, setFilmList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
+  const windowSize = useWindowSize();  
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -96,9 +95,9 @@ const ListFilm = ({
 
   const goToPage = useCallback(
     (pageNumber) => {
-      onPageChange(pageNumber);
+      handlePageChange(pageNumber);
     },
-    [onPageChange]
+    [handlePageChange]
   );
 
   const handleFilmClick = useCallback(
@@ -133,12 +132,41 @@ const ListFilm = ({
     [DOMAIN_API]
   );
 
+  const FilmItem = ({ columnIndex, rowIndex, style }) => {
+    const index = rowIndex * 4 + columnIndex;
+    const film = filmList[index];
+    if (!film) return null;
+    return (
+      <div style={style} className="p-4">
+        <FilmCard
+          key={film._id}
+          film={film}
+          DOMAIN_API={DOMAIN_API}
+          onClick={() => handleFilmClick(film)}
+        />
+      </div>
+    );
+  };
+
+  const getColumnCount = () => {
+    if (windowSize.width < 640) return 1;
+    if (windowSize.width < 768) return 2;
+    if (windowSize.width < 1024) return 3;
+    return 4;
+  };
+
+  const columnCount = getColumnCount();
+
+  // const columnWidth = () => {
+  //   const containerWidth = windowSize.width - 32; 
+  //   const gap = 16;
+  //   return (containerWidth - gap * (columnCount - 1)) / columnCount;
+  // };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center p-52 ">
-        {" "}
-        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
-          {" "}
+        <h1 className="text-3xl animate-pulse font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           ĐANG TẢI...
         </h1>
       </div>
@@ -148,14 +176,14 @@ const ListFilm = ({
   if (error) {
     return (
       <div className="flex justify-center items-center p-52">
-        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+        <h1 className="text-3xl animate-pulse font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           {error}
         </h1>
       </div>
     );
   }
 
-  if (!category) {
+  if (!category || category==="Trang Chủ") {
     return (
       <div className="bg-[#121111]">
         <br />
@@ -173,14 +201,12 @@ const ListFilm = ({
     <div className="bg-[#121111]">
       <br />
       <br />
-      <h1 className="font-bold text-center text-zinc-50 text-4xl">
-        {category}
-      </h1>
+      <h1 className="font-bold text-center text-zinc-50 text-4xl">{category}</h1>
       <br />
       <div className="flex justify-center border-solid-[#dba902]">
         <button
           className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => onPageChange(page - 1)}
+          onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
         >
           Trang Trước
@@ -206,29 +232,30 @@ const ListFilm = ({
         ))}
         <button
           className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => onPageChange(page + 1)}
+          onClick={() => handlePageChange(page + 1)}
           disabled={page >= totalPages}
         >
           Trang Sau
         </button>
       </div>
-      <div className="border-2 border-double border-amber-500">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {Array.isArray(filmList) &&
-            filmList.map((film) => (
-              <FilmCard
-                key={film._id}
-                film={film}
-                DOMAIN_API={DOMAIN_API}
-                onClick={() => handleFilmClick(film)}
-              />
-            ))}
+      <div className="border-2 border-double border-amber-500 overflow-hidden">
+        <div className="overflow-hidden" style={{ height: "820px", width: "100%" }}>
+          <Grid
+            columnCount={columnCount}  
+            columnWidth= {() => 300}  
+            height={800}
+            rowCount={Math.ceil(filmList.length / columnCount)}
+            rowHeight={() => 420}
+            width={windowSize.width - 32}
+          >
+            {FilmItem}
+          </Grid>
         </div>
       </div>
       <div className="flex justify-center border-solid-[#dba902]">
         <button
           className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => onPageChange(page - 1)}
+          onClick={() => handlePageChange(page - 1)}
           disabled={page === 1}
         >
           Trang Trước
@@ -254,7 +281,7 @@ const ListFilm = ({
         ))}
         <button
           className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => onPageChange(page + 1)}
+          onClick={() => handlePageChange(page + 1)}
           disabled={page >= totalPages}
         >
           Trang Sau

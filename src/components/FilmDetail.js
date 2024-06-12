@@ -1,21 +1,22 @@
-// src/components/FilmDetail.js
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import EpisodesList from "./EpisodesList"; // Import the EpisodesList component
+import EpisodesList from "./EpisodesList";
+import { GlobalContext } from "../context/GlobalContext";
 
-function FilmDetail({ DOMAIN_API }) {
+function FilmDetail() {
   const { slug } = useParams();
+  const { DOMAIN_API } = useContext(GlobalContext);
+  const navigate = useNavigate();
   const [film, setFilm] = useState(null);
   const [hideContent, setHideContent] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFilm = async () => {
       try {
         const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
         setFilm(response.data.data);
-        console.log(response.data.data); // Log the fetched data
+        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching film data:", error);
       }
@@ -24,11 +25,17 @@ function FilmDetail({ DOMAIN_API }) {
   }, [slug, DOMAIN_API]);
 
   const handleWatchClick = () => {
-    navigate(`/movie/${slug}/watch`);
+    navigate(`/movie/${slug}/watch?ep=1`);
   };
 
   if (!film) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center p-52">
+        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+          Loading...
+        </h1>
+      </div>
+    );
   }
 
   return (
@@ -73,19 +80,19 @@ function FilmDetail({ DOMAIN_API }) {
                   ? film.breadCrumb
                       .slice(0, film.breadCrumb.length - 1)
                       .map((bred) => (
-                        <a
+                        <button
                           key={bred.position}
                           className="bg-gray-600/30 text-white w-fit py-1 px-3 text-xs rounded-2xl"
                         >
                           <span className="is-dark">{bred.name}</span>
-                        </a>
+                        </button>
                       ))
                   : ""}
               </p>
               <ul className="">
                 <li className="space-x-2">
                   <span className="text-foreground/50 text-[#dba902] text-lg">
-                    Quốc gia:&nbsp;{" "}
+                    Quốc gia:&nbsp;
                   </span>
                   <span className="px-1 border-solid text-slate-100">
                     {film.item.country[0].name}
@@ -93,7 +100,7 @@ function FilmDetail({ DOMAIN_API }) {
                 </li>
                 <li className="space-x-1 ">
                   <span className="text-foreground/50 text-[#dba902] text-lg">
-                    Thể loại:&nbsp;{" "}
+                    Thể loại:&nbsp;
                   </span>
                   <span className="px-1 border-solid text-slate-100">
                     {film.breadCrumb[0].name}
@@ -101,7 +108,7 @@ function FilmDetail({ DOMAIN_API }) {
                 </li>
                 <li className="space-x-2">
                   <span className="text-foreground/50 text-[#dba902] text-lg">
-                    Số tập:&nbsp;{" "}
+                    Số tập:&nbsp;
                   </span>
                   <span className="px-1 border-solid text-slate-100">
                     {film.item.episode_total} - {film.item.time}
@@ -153,7 +160,7 @@ function FilmDetail({ DOMAIN_API }) {
             </div>
           </div>
         </div>
-        <EpisodesList episodes={film.episodes} slug={slug} /> 
+        <EpisodesList episodes={film.episodes} slug={slug} />
       </div>
     </div>
   );

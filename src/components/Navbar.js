@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../context/GlobalContext";
 
-const Navbar = ({ onCategorySelect }) => {
+const Navbar = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [category, setCategory] = useState("Trang Chủ");
+  const { category, setCategory, handleCategorySelect } =
+    useContext(GlobalContext);
 
   const categoryList = [
     "Trang Chủ",
@@ -20,13 +22,13 @@ const Navbar = ({ onCategorySelect }) => {
   ];
 
   const handleCategoryClick = (selectedCategory) => {
-    onCategorySelect(selectedCategory);
-    setCategory(selectedCategory);
+    handleCategorySelect(selectedCategory);
     navigate(
       selectedCategory === "Trang Chủ"
         ? "/"
         : `/${selectedCategory.replace(/\s+/g, "-").toLowerCase()}`
     );
+    setCategory(selectedCategory === "Trang Chủ" ? "" : selectedCategory);
     setMenuOpen(false);
     const topMenu = document.getElementById("top-menu");
     if (topMenu) {
@@ -84,21 +86,8 @@ const Navbar = ({ onCategorySelect }) => {
           </li>
         ))}
       </ul>
-      <div  id="toggleTopMenuIcon" className="lg:hidden p-5 hover:bg-[#2c3f3b]">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="3"
-          stroke="currentColor"
-          className="w-6 h-6 text-white cursor-pointer"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-          />
-        </svg>
+      <div id="toggleTopMenuIcon" className="lg:hidden p-5 hover:bg-[#2c3f3b]">
+        <i className="fa fa-bars text-white" />
       </div>
     </div>
   );

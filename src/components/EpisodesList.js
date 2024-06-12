@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { GlobalContext } from "../context/GlobalContext";
 
-const EpisodesList = ({ episodes, slug, onEpisodeChange, ep }) => {
+const EpisodesList = ({ episodes, slug }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const { handleEpisodeChange, ep } = useContext(GlobalContext);
+
   const openList = () => {
     setIsOpen(!isOpen);
   };
+
   return (
     <div className="p-6 rounded-md">
       {Array.isArray(episodes) &&
@@ -21,7 +25,6 @@ const EpisodesList = ({ episodes, slug, onEpisodeChange, ep }) => {
                     &nbsp;{server.server_name}
                   </span>
                 </p>
-
               </button>
             </h2>
             <div
@@ -38,7 +41,7 @@ const EpisodesList = ({ episodes, slug, onEpisodeChange, ep }) => {
                         : "bg-[#dba902] text-black"
                     }`}
                     onClick={() =>
-                      onEpisodeChange(slug, episode.name, serverIndex)
+                      handleEpisodeChange(slug, episode.name, serverIndex)
                     }
                   >
                     Tập {episode.name}
