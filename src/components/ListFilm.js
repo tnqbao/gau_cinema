@@ -5,33 +5,28 @@ import { VariableSizeGrid as Grid } from "react-window";
 import { GlobalContext } from "../context/GlobalContext";
 import FilmCard from "./FilmCard";
 import FilmSlider from "./FilmSlider";
-import useWindowSize from '../hooks/useWindowSize';  
+import useWindowSize from "../hooks/useWindowSize";
 
 const ListFilm = () => {
-  const { category, apiURL, DOMAIN_API, limit, page, handlePageChange } =
-    useContext(GlobalContext);
+  const { category, apiURL, DOMAIN_API, limit, page, handlePageChange } = useContext(GlobalContext);
   const [filmList, setFilmList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
-  const windowSize = useWindowSize();  
+  const windowSize = useWindowSize();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.get(apiURL);
-      if (
-        response.data &&
-        response.data.data &&
-        Array.isArray(response.data.data.items)
-      ) {
+      if (response.data && response.data.data && Array.isArray(response.data.data.items)) {
         setFilmList(response.data.data.items);
         setTotalPages(
           Math.ceil(
             response.data.data.params.pagination.totalItems /
-              response.data.data.params.pagination.totalItemsPerPage
+            response.data.data.params.pagination.totalItemsPerPage
           ) || 1
         );
       } else {
@@ -58,21 +53,14 @@ const ListFilm = () => {
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
       { name: "animation", url: `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh` },
-      {
-        name: "dubbed",
-        url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh`,
-      },
+      { name: "dubbed", url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh` },
     ];
 
     try {
       const filmsData = {};
       for (const category of categories) {
         const response = await axios.get(category.url);
-        if (
-          response.data &&
-          response.data.data &&
-          Array.isArray(response.data.data.items)
-        ) {
+        if (response.data && response.data.data && Array.isArray(response.data.data.items)) {
           filmsData[category.name] = response.data.data.items;
         } else {
           filmsData[category.name] = [];
@@ -133,7 +121,7 @@ const ListFilm = () => {
   );
 
   const FilmItem = ({ columnIndex, rowIndex, style }) => {
-    const index = rowIndex * 4 + columnIndex;
+    const index = rowIndex * getColumnCount() + columnIndex;
     const film = filmList[index];
     if (!film) return null;
     return (
@@ -156,16 +144,16 @@ const ListFilm = () => {
   };
 
   const columnCount = getColumnCount();
+  const rowCount = Math.ceil(filmList.length / columnCount);
 
-  // const columnWidth = () => {
-  //   const containerWidth = windowSize.width - 32; 
-  //   const gap = 16;
-  //   return (containerWidth - gap * (columnCount - 1)) / columnCount;
-  // };
+  const getHeight = () => {
+    const rowHeight = 420;
+    return (rowCount * rowHeight) + 30;
+  };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center p-52 ">
+      <div className="flex justify-center items-center p-32 lg:p-52">
         <h1 className="text-3xl animate-pulse font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           ĐANG TẢI...
         </h1>
@@ -175,7 +163,7 @@ const ListFilm = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center p-52">
+      <div className="flex justify-center items-center p-32 lg:p-52">
         <h1 className="text-3xl animate-pulse font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           {error}
         </h1>
@@ -183,7 +171,7 @@ const ListFilm = () => {
     );
   }
 
-  if (!category || category==="Trang Chủ") {
+  if (!category || category === "Trang Chủ") {
     return (
       <div className="bg-[#121111]">
         <br />
@@ -239,12 +227,12 @@ const ListFilm = () => {
         </button>
       </div>
       <div className="border-2 border-double border-amber-500 overflow-hidden">
-        <div className="overflow-hidden" style={{ height: "820px", width: "100%" }}>
+        <div className="overflow-hidden" style={{ height: `${getHeight()}px`, width: "100%" }}>
           <Grid
-            columnCount={columnCount}  
-            columnWidth= {() => 300}  
-            height={800}
-            rowCount={Math.ceil(filmList.length / columnCount)}
+            columnCount={columnCount}
+            columnWidth={() => 300}
+            height={getHeight()}
+            rowCount={rowCount}
             rowHeight={() => 420}
             width={windowSize.width - 32}
           >

@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Artplayer from "artplayer";
@@ -7,12 +13,8 @@ import { GlobalContext } from "../context/GlobalContext";
 import EpisodesList from "./EpisodesList";
 
 function VideoPlayer() {
-  const {
-    DOMAIN_API,
-    handleEpisodeChange,
-    ep,
-  } = useContext(GlobalContext);
-  
+  const { DOMAIN_API, handleEpisodeChange, ep } = useContext(GlobalContext);
+
   const { slug } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,16 +49,14 @@ function VideoPlayer() {
     try {
       const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
       setFilm(response.data);
-      const episodes = response.data.data.item.episodes;
-      const selectedEpisode = episodes.find((ep) =>
-        ep.server_data.find((srv) => srv.name === episode)
-      );
       const videoLink =
-        selectedEpisode.server_data.length > 1
-          ? selectedEpisode.server_data.find(
-              (srv) => srv.name === episode
+        response.data.data.item.episodes[0].server_data.length > 1
+          ? response.data.data.item.episodes[0].server_data.find(
+              (ep) => ep.name === episode
             ).link_m3u8
-          : selectedEpisode.server_data[0].link_m3u8;
+          : response.data.data.item.episodes[0].server_data[0].name.length > 0
+          ? response.data.data.item.episodes[0].server_data[0].link_m3u8
+          : response.data.data.trailer_url;
 
       if (videoLink) {
         setVideoUrl(videoLink);

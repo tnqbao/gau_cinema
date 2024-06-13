@@ -2,21 +2,6 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/GlobalContext";
 
-const useOutsideClick = (ref, callback) => {
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (ref.current && !ref.current.contains(event.target)) {
-        callback();
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [ref, callback]);
-};
-
 const SearchIcon = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -35,12 +20,10 @@ const SearchIcon = ({ className }) => (
 );
 
 const Header = () => {
-  const { handleCategorySearch } =
-    useContext(GlobalContext);
+  const { handleCategorySearch } = useContext(GlobalContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
-  const searchInputRef = useRef(null);
   const toggleSearchButtonRef = useRef(null);
 
   const handleCategoryClick = () => {
@@ -59,8 +42,24 @@ const Header = () => {
     }
   };
 
-  useOutsideClick(searchInputRef, () => setSearchOpen(false));
-  useOutsideClick(toggleSearchButtonRef, () => setSearchOpen(true));
+  const handleDocumentClick = (e) => {
+    const searchInput = document.getElementById("search-input");
+    const toggleSearchButton = document.getElementById("toggleSearchButton");
+
+    if (toggleSearchButton && toggleSearchButton.contains(e.target)) {
+      setSearchOpen(true);
+    } else if (searchInput && !searchInput.contains(e.target)) {
+      setSearchOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleDocumentClick);
+
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, []);
 
   return (
     <div className="bg-[#1e2020] p-4 flex items-center justify-between border-2 border-y-yellow-500 border-x-[#1e2020] w-full">
@@ -76,7 +75,7 @@ const Header = () => {
         } md:flex`}
       >
         <input
-          ref={searchInputRef}
+          id="search-input"
           className="w-full p-2 md:p-4 rounded-md border-2 border-gray-300 outline-none focus:border-gray-500 text-xl"
           type="search"
           placeholder="Tìm Kiếm"

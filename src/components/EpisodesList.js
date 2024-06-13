@@ -3,7 +3,7 @@ import { GlobalContext } from "../context/GlobalContext";
 
 const EpisodesList = ({ episodes, slug }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const { handleEpisodeChange, ep } = useContext(GlobalContext);
+  const { handleEpisodeChange, ep, viewedEpisodes } = useContext(GlobalContext);
 
   const openList = () => {
     setIsOpen(!isOpen);
@@ -38,6 +38,9 @@ const EpisodesList = ({ episodes, slug }) => {
                     className={`min-w-[7rem] flex mx-2 my-2 items-center justify-center rounded-md p-3 font-bold w-3 hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 ${
                       ep === episode.name
                         ? "bg-gray-800 text-white hover:bg-[#2c3f3b]"
+                        : viewedEpisodes[slug] &&
+                          viewedEpisodes[slug].includes(episode.name)
+                        ? "bg-green-900 text-white hover:bg-[#2c3f3b]"
                         : "bg-[#dba902] text-black"
                     }`}
                     onClick={() =>
