@@ -91,10 +91,18 @@ const FilmSlider = ({ categoryTitle, films = [], onFilmClick }) => {
           disabled={startIndex === 0 && loopCount === 0}
           className="px-5 py-20 md:py-44 rounded-xl bg-[#dba902]/50 text-black absolute left-0 z-10 opacity-100 md:opacity-0 hover:opacity-100 transition-opacity duration-300 border-y-slate-500 text-xl after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-white cursor-pointer">
-  <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z" clip-rule="evenodd" />
-</svg>
-
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            class="w-6 h-6 text-white cursor-pointer"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M7.72 12.53a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 1 1 1.06 1.06L9.31 12l6.97 6.97a.75.75 0 1 1-1.06 1.06l-7.5-7.5Z"
+              clip-rule="evenodd"
+            />
+          </svg>
         </button>
         <div className="flex overflow-hidden w-full">
           <div

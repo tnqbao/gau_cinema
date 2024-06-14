@@ -62,12 +62,15 @@ function VideoPlayer() {
           ? response.data.data.item.episodes[0].server_data[0].link_m3u8
           : response.data.data.trailer_url;
 
-      if (videoLink) {
-        setVideoUrl(videoLink);
-        setError(null);
-      } else {
-        setError("Video not found");
-      }
+          if (videoLink) {
+            setVideoUrl(videoLink);
+            setError(null);
+          } else if (response.data.data.trailer_url) {
+            setVideoUrl(response.data.data.trailer_url);
+            setError(null);
+          } else {
+            setError("Video not found");
+          }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setError("404 Not Found. Retrying...");

@@ -75,14 +75,14 @@ export const GlobalProvider = ({ children }) => {
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
-    setApiURL((prevURL) => prevURL.replace(/page=\d+/, `pasge=${newPage}`));
+    setApiURL((prevURL) => prevURL.replace(/page=\d+/, `page=${newPage}`));
   };
 
   const handleEpisodeChange = useCallback((slug, episode, server) => {
     const watchedEpisodes = JSON.parse(localStorage.getItem('watchedEpisodes')) || {};
     if (!watchedEpisodes[slug]) {
       watchedEpisodes[slug] = [];
-      watchedEpisodes[slug].push("1","full");
+      watchedEpisodes[slug].push("1","Full");
     }
     if (!watchedEpisodes[slug].includes(episode)) {
       watchedEpisodes[slug].push(episode);

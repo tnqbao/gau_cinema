@@ -49,6 +49,7 @@ const ListFilm = () => {
   const fetchCategories = useCallback(async () => {
     setLoading(true);
     const categories = [
+      // { name: "", url: ``},
       { name: "newReleases", url: `${DOMAIN_API}/v1/api/danh-sach/phim-moi` },
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
@@ -176,7 +177,7 @@ const ListFilm = () => {
       <div className="bg-[#121111]">
         <br />
         <br />
-        {(filmList.recentViewed) ? renderSlider("Xem Gần Đây", filmList.recentViewed) : ""}
+        {(filmList.currentViewd) ? renderSlider("Xem Gần Đây", filmList.currentViewd) : ""}
         {renderSlider("Phim Mới Cập Nhật", filmList.newReleases)}
         {renderSlider("Phim Lẻ", filmList.movies)}
         {renderSlider("Phim Bộ", filmList.series)}
