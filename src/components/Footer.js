@@ -9,7 +9,7 @@ const Footer = () => {
           XEM PHIM VUI VẺ =))
         </span>
         <p className="font-bold text-foreground/60 text-white">
-          (v0.0.2) Bản cập nhật thứ 0.0.2
+          (v0.0.3) Bản cập nhật thứ 0.0.3
         </p>
       </div>
       <div className="flex justify-center">

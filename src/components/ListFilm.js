@@ -176,6 +176,7 @@ const ListFilm = () => {
       <div className="bg-[#121111]">
         <br />
         <br />
+        {(filmList.recentViewed) ? renderSlider("Xem Gần Đây", filmList.recentViewed) : ""}
         {renderSlider("Phim Mới Cập Nhật", filmList.newReleases)}
         {renderSlider("Phim Lẻ", filmList.movies)}
         {renderSlider("Phim Bộ", filmList.series)}

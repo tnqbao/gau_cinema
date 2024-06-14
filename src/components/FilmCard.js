@@ -20,7 +20,7 @@ const FilmCard = ({ film }) => {
     <div
       className="relative p-2 border border-gray-800 rounded-lg cursor-pointer hover:shadow-lg m-2 hover:contrast-100 object-fill text-transparent hover:backdrop-brightness-200"
       onClick={handleFilmClick}
-      style={{ height: '400px' }} // Set a fixed height for the card container
+      style={{ height: '400px' }} 
     >
       <div className="relative w-full h-full">
         <img

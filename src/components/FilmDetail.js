@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import EpisodesList from "./EpisodesList";
 import { GlobalContext } from "../context/GlobalContext";
 
 function FilmDetail() {
   const { slug } = useParams();
-  const { DOMAIN_API } = useContext(GlobalContext);
-  const navigate = useNavigate();
+  const { DOMAIN_API, handleEpisodeChange } = useContext(GlobalContext);
   const [film, setFilm] = useState(null);
   const [hideContent, setHideContent] = useState(true);
 
@@ -16,7 +15,6 @@ function FilmDetail() {
       try {
         const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
         setFilm(response.data.data);
-        console.log(response.data.data);
       } catch (error) {
         console.error("Error fetching film data:", error);
       }
@@ -24,14 +22,10 @@ function FilmDetail() {
     fetchFilm();
   }, [slug, DOMAIN_API]);
 
-  const handleWatchClick = () => {
-    navigate(`/movie/${slug}/watch?ep=1`);
-  };
-
   if (!film) {
     return (
       <div className="flex justify-center items-center p-52">
-        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+        <h1 className="text-3xl animate-pulse font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           Loading...
         </h1>
       </div>
@@ -152,7 +146,7 @@ function FilmDetail() {
                 <br />
                 <button
                   className="bg-[#dba902] px-20 py-3 rounded-lg w-full font-bold my-2 hover:bg-[#186e5c] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-                  onClick={handleWatchClick}
+                  onClick={() => handleEpisodeChange(slug, "1", 0)}
                 >
                   Xem ngay
                 </button>

@@ -13,7 +13,11 @@ import { GlobalContext } from "../context/GlobalContext";
 import EpisodesList from "./EpisodesList";
 
 function VideoPlayer() {
-  const { DOMAIN_API, handleEpisodeChange, ep } = useContext(GlobalContext);
+  const {
+    DOMAIN_API,
+    handleEpisodeChange,
+    ep,
+  } = useContext(GlobalContext);
 
   const { slug } = useParams();
   const location = useLocation();
@@ -136,7 +140,7 @@ function VideoPlayer() {
                 film.data.item.episodes[0].server_data.length;
               if (currentEpisode < totalEpisodes) {
                 const nextEpisode = currentEpisode + 1;
-                handleEpisodeChange(slug, nextEpisode, server);
+                handleEpisodeChange(slug, nextEpisode + "", server);
               }
             },
             mounted: () => {
