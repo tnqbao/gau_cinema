@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState, useEffect, useCallback, useContext } from "react";
-import { VariableSizeGrid as Grid } from "react-window";
 import { GlobalContext } from "../context/GlobalContext";
 import FilmCard from "./FilmCard";
 import FilmSlider from "./FilmSlider";
@@ -49,7 +48,6 @@ const ListFilm = () => {
   const fetchCategories = useCallback(async () => {
     setLoading(true);
     const categories = [
-      // { name: "", url: ``},
       { name: "newReleases", url: `${DOMAIN_API}/v1/api/danh-sach/phim-moi` },
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
@@ -121,36 +119,11 @@ const ListFilm = () => {
     [DOMAIN_API]
   );
 
-  const FilmItem = ({ columnIndex, rowIndex, style }) => {
-    const index = rowIndex * getColumnCount() + columnIndex;
-    const film = filmList[index];
-    if (!film) return null;
-    return (
-      <div style={style} className="p-4">
-        <FilmCard
-          key={film._id}
-          film={film}
-          DOMAIN_API={DOMAIN_API}
-          onClick={() => handleFilmClick(film)}
-        />
-      </div>
-    );
-  };
-
   const getColumnCount = () => {
-    if (windowSize.width < 640) return 1;
-    if (windowSize.width < 768) return 2;
-    if (windowSize.width < 1024) return 3;
-    return 4;
+    return Math.ceil((windowSize.width - 640) / 256 + 1)
   };
 
   const columnCount = getColumnCount();
-  const rowCount = Math.ceil(filmList.length / columnCount);
-
-  const getHeight = () => {
-    const rowHeight = 420;
-    return (rowCount * rowHeight) + 30;
-  };
 
   if (loading) {
     return (
@@ -229,17 +202,20 @@ const ListFilm = () => {
         </button>
       </div>
       <div className="border-2 border-double border-amber-500 overflow-hidden">
-        <div className="overflow-hidden" style={{ height: `${getHeight()}px`, width: "100%" }}>
-          <Grid
-            columnCount={columnCount}
-            columnWidth={() => 300}
-            height={getHeight()}
-            rowCount={rowCount}
-            rowHeight={() => 420}
-            width={windowSize.width - 32}
-          >
-            {FilmItem}
-          </Grid>
+        <div className="flex flex-wrap justify-start">
+          {Array.isArray(filmList) && filmList.map((film, index) => (
+            <div
+              key={film._id}
+              className="p-1"
+              style={{ flex: `0 0 ${100 / columnCount}%`, maxWidth: `${100 / columnCount}%`}}
+            >
+              <FilmCard
+                film={film}
+                DOMAIN_API={DOMAIN_API}
+                onClick={() => handleFilmClick(film)}
+              />
+            </div>
+          ))}
         </div>
       </div>
       <div className="flex justify-center border-solid-[#dba902]">

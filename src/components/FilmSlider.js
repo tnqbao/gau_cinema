@@ -12,10 +12,16 @@ const FilmSlider = ({ categoryTitle, films = [], onFilmClick }) => {
     const handleResize = () => {
       if (window.innerWidth < 640) {
         setFilmsPerPage(1);
-      } else if (window.innerWidth < 1024) {
+
+      } 
+      else if(window.innerWidth<768)
+      {
+        setFilmsPerPage(2);
+      }
+      else if (window.innerWidth < 1024) {
         setFilmsPerPage(3);
       } else {
-        setFilmsPerPage(4);
+        setFilmsPerPage(Math.ceil(window.innerWidth/320));
       }
     };
 
