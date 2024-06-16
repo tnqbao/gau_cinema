@@ -1,4 +1,4 @@
-// src/utils/analytics.js
+
 import ReactGA from "react-ga4";
 
 const initGA = () => {

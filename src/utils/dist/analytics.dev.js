@@ -9,7 +9,6 @@ var _reactGa = _interopRequireDefault(require("react-ga4"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-// src/utils/analytics.js
 var initGA = function initGA() {
   _reactGa["default"].initialize("G-JL34R1GT3W");
 };

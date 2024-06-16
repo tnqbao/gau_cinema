@@ -65,7 +65,7 @@ const Header = () => {
     <div className="bg-[#1e2020] p-4 flex items-center justify-between border-2 border-y-yellow-500 border-x-[#1e2020] w-full">
       <div className="basis-1/3 md:basis-1/4 flex items-center">
         <div
-          className="bg-[url('https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXZrdDRyMm5jODVlM2dsdWNiaTVnampncDU2eW4zamMycDB3dXIzYyZlcD12MV9pbnRlcm5fZ2lmX2J5X2lkJmN0PWc/04Y7m4gkurv2XjOzxv/giphy.gif')] w-16 h-16 md:w-24 md:h-24 bg-cover rounded-md border-2 border-yellow-500 cursor-pointer bg-center"
+          className="bg-[url('https://i.imgur.com/F7Zqbq0.png')] w-16 h-16 md:w-24 md:h-24 bg-cover rounded-md border-2 border-yellow-500 cursor-pointer bg-center"
           onClick={handleHomeClick}
         />
       </div>

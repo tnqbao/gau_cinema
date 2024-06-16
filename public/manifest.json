@@ -1,6 +1,6 @@
 {
-  "short_name": "BAO_CINEMA",
-  "name": "Xem Phim Vui Vẻ",
+  "short_name": "CÚ PHIM",
+  "name": "Xem Phim Vui Vẻ Tại Cú Phim",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#dba902",
+  "background_color": "#121111"
 }
