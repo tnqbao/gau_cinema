@@ -9,4 +9,4 @@ Disallow: /api/
 Disallow: /static/
 Disallow: /private/
 
-Sitemap: https://cuph.vercel.app/sitemap.xml
+Sitemap: https://cuphim.vercel.app/sitemap.xml
