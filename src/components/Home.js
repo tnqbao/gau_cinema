@@ -37,14 +37,17 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>{"Cú Phim - Website xem phim trực tuyến chất lượng cao, " + <br>không quảng cáo</br> + ", đa dạng thể loại." + <br>Xem phim HD, phim VietSub, Phim Hoạt Hình</br> + "tại CUPHIM"}</title>
-        <meta name="description" content={seoData.descriptionHead} />
+        <title>{"Cú Phim - Website xem phim trực tuyến chất lượng cao"}</title>
+        <meta
+          name="description"
+          content="Phim cung cấp kho phim không quảng cáo, đa dạng thể loại. Xem phim HD, phim VietSub, Phim Hoạt Hình tại CUPHIM. Mọi thể loại"
+        />
         <meta property="og:type" content="website" />
         {seoData.og_image.map((image, index) => (
           <meta property="og:image" content={image} key={index} />
         ))}
       </Helmet>
-      <ListFilm films = {films}></ListFilm>
+      <ListFilm films={films}></ListFilm>
     </>
   );
 };
