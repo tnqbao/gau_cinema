@@ -1,5 +1,7 @@
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import ListFilm from "./components/ListFilm";
@@ -7,7 +9,6 @@ import FilmDetail from "./components/FilmDetail";
 import VideoPlayer from "./components/VideoPlayer";
 import Footer from "./components/Footer";
 import { GlobalProvider } from "./context/GlobalContext";
-import { HelmetProvider } from "react-helmet-async";
 import "./App.css";
 import Home from "./components/Home";
 
@@ -26,6 +27,7 @@ function App() {
               <Route path="/movie/:slug/watch" element={<VideoPlayer />} />
             </Routes>
           </ConditionalWrapper>
+          <SpeedInsights/>
           <Footer />
         </div>
       </HelmetProvider>
