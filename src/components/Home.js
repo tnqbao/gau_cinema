@@ -37,7 +37,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>{seoData.titleHead}</title>
+        <title>{"Cú Phim" - seoData.titleHead}</title>
         <meta name="description" content={seoData.descriptionHead} />
         <meta property="og:type" content="website" />
         {seoData.og_image.map((image, index) => (
