@@ -20,7 +20,7 @@ const SearchIcon = ({ className }) => (
 );
 
 const Header = () => {
-  const { handleCategorySearch } = useContext(GlobalContext);
+  const { handleCategorySearch, setCategory } = useContext(GlobalContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ const Header = () => {
   };
 
   const handleHomeClick = () => {
+    setCategory(null);
     handleCategorySearch("");
     navigate(`/`);
   };

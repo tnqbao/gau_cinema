@@ -28,7 +28,7 @@ const Navbar = () => {
         ? "/"
         : `/${selectedCategory.replace(/\s+/g, "-").toLowerCase()}`
     );
-    setCategory(selectedCategory === "Trang Chủ" ? "" : selectedCategory);
+    setCategory(selectedCategory === "Trang Chủ" ? null : selectedCategory);
     setMenuOpen(false);
     const topMenu = document.getElementById("top-menu");
     if (topMenu) {
