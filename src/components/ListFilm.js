@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import React, { useState, useEffect, useCallback, useContext } from "react";
+import { Helmet } from "react-helmet-async";
 import { GlobalContext } from "../context/GlobalContext";
 import FilmCard from "./FilmCard";
 import FilmSlider from "./FilmSlider";
 import useWindowSize from "../hooks/useWindowSize";
 
-const ListFilm = () => {
-  const { category, apiURL, DOMAIN_API, limit, page, handlePageChange } = useContext(GlobalContext);
-  const [filmList, setFilmList] = useState([]);
+const ListFilm = ({films}) => {
+  const { category, apiURL, DOMAIN_API, limit, page, handlePageChange } =
+    useContext(GlobalContext);
+  const [filmList, setFilmList] = useState(films || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [totalPages, setTotalPages] = useState(1);
@@ -20,12 +22,16 @@ const ListFilm = () => {
     setError(null);
     try {
       const response = await axios.get(apiURL);
-      if (response.data && response.data.data && Array.isArray(response.data.data.items)) {
+      if (
+        response.data &&
+        response.data.data &&
+        Array.isArray(response.data.data.items)
+      ) {
         setFilmList(response.data.data.items);
         setTotalPages(
           Math.ceil(
             response.data.data.params.pagination.totalItems /
-            response.data.data.params.pagination.totalItemsPerPage
+              response.data.data.params.pagination.totalItemsPerPage
           ) || 1
         );
       } else {
@@ -52,14 +58,21 @@ const ListFilm = () => {
       { name: "movies", url: `${DOMAIN_API}/v1/api/danh-sach/phim-le` },
       { name: "series", url: `${DOMAIN_API}/v1/api/danh-sach/phim-bo` },
       { name: "animation", url: `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh` },
-      { name: "dubbed", url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh` },
+      {
+        name: "dubbed",
+        url: `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh`,
+      },
     ];
 
     try {
       const filmsData = {};
       for (const category of categories) {
         const response = await axios.get(category.url);
-        if (response.data && response.data.data && Array.isArray(response.data.data.items)) {
+        if (
+          response.data &&
+          response.data.data &&
+          Array.isArray(response.data.data.items)
+        ) {
           filmsData[category.name] = response.data.data.items;
         } else {
           filmsData[category.name] = [];
@@ -120,7 +133,7 @@ const ListFilm = () => {
   );
 
   const getColumnCount = () => {
-    return Math.ceil((windowSize.width - 640) / 256 + 1)
+    return Math.ceil((windowSize.width - 640) / 256 + 1);
   };
 
   const columnCount = getColumnCount();
@@ -150,7 +163,9 @@ const ListFilm = () => {
       <div className="bg-[#121111]">
         <br />
         <br />
-        {(filmList.currentViewd) ? renderSlider("Xem Gần Đây", filmList.currentViewd) : ""}
+        {filmList.currentViewd
+          ? renderSlider("Xem Gần Đây", filmList.currentViewd)
+          : ""}
         {renderSlider("Phim Mới Cập Nhật", filmList.newReleases)}
         {renderSlider("Phim Lẻ", filmList.movies)}
         {renderSlider("Phim Bộ", filmList.series)}
@@ -162,97 +177,107 @@ const ListFilm = () => {
 
   return (
     <div className="bg-[#121111]">
-      <br />
-      <br />
-      <h1 className="font-bold text-center text-zinc-50 text-4xl">{category}</h1>
-      <br />
-      <div className="flex justify-center border-solid-[#dba902]">
-        <button
-          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-        >
-          Trang Trước
-        </button>
-        {getPageNumbers().map((pageNumber) => (
+    <Helmet>
+      <title>{category} - Cú Phim</title>
+      <meta name="description" content={`Danh sách phim thuộc thể loại ${category}. Tìm phim mới nhất và phổ biến nhất trong thể loại này.`} />
+    </Helmet>
+        <br />
+        <br />
+        <h1 className="font-bold text-center text-zinc-50 text-4xl">
+          {category}
+        </h1>
+        <br />
+        <div className="flex justify-center border-solid-[#dba902]">
           <button
-            key={pageNumber}
-            disabled={pageNumber === "..."}
-            onClick={() => {
-              if (pageNumber !== "...") {
-                goToPage(pageNumber);
-              }
-            }}
-            className={
-              "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
-              (pageNumber === page
-                ? "bg-[#dba902] text-black"
-                : "bg-gray-800 text-white hidden md:block")
-            }
+            className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
           >
-            {pageNumber}
+            Trang Trước
           </button>
-        ))}
-        <button
-          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page >= totalPages}
-        >
-          Trang Sau
-        </button>
-      </div>
-      <div className="border-2 border-double border-amber-500 overflow-hidden">
-        <div className="flex flex-wrap justify-start">
-          {Array.isArray(filmList) && filmList.map((film, index) => (
-            <div
-              key={film._id}
-              className="p-1"
-              style={{ flex: `0 0 ${100 / columnCount}%`, maxWidth: `${100 / columnCount}%`}}
+          {getPageNumbers().map((pageNumber) => (
+            <button
+              key={pageNumber}
+              disabled={pageNumber === "..."}
+              onClick={() => {
+                if (pageNumber !== "...") {
+                  goToPage(pageNumber);
+                }
+              }}
+              className={
+                "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
+                (pageNumber === page
+                  ? "bg-[#dba902] text-black"
+                  : "bg-gray-800 text-white hidden md:block")
+              }
             >
-              <FilmCard
-                film={film}
-                DOMAIN_API={DOMAIN_API}
-                onClick={() => handleFilmClick(film)}
-              />
-            </div>
+              {pageNumber}
+            </button>
           ))}
-        </div>
-      </div>
-      <div className="flex justify-center border-solid-[#dba902]">
-        <button
-          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => handlePageChange(page - 1)}
-          disabled={page === 1}
-        >
-          Trang Trước
-        </button>
-        {getPageNumbers().map((pageNumber) => (
           <button
-            key={pageNumber}
-            disabled={pageNumber === "..."}
-            onClick={() => {
-              if (pageNumber !== "...") {
-                goToPage(pageNumber);
-              }
-            }}
-            className={
-              "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
-              (pageNumber === page
-                ? "bg-[#dba902] text-black"
-                : "bg-gray-800 text-white hidden md:block")
-            }
+            className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page >= totalPages}
           >
-            {pageNumber}
+            Trang Sau
           </button>
-        ))}
-        <button
-          className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
-          onClick={() => handlePageChange(page + 1)}
-          disabled={page >= totalPages}
-        >
-          Trang Sau
-        </button>
-      </div>
+        </div>
+        <div className="border-2 border-double border-amber-500 overflow-hidden">
+          <div className="flex flex-wrap justify-start">
+            {Array.isArray(filmList) &&
+              filmList.map((film, index) => (
+                <div
+                  key={film._id}
+                  className="p-1"
+                  style={{
+                    flex: `0 0 ${100 / columnCount}%`,
+                    maxWidth: `${100 / columnCount}%`,
+                  }}
+                >
+                  <FilmCard
+                    film={film}
+                    DOMAIN_API={DOMAIN_API}
+                    onClick={() => handleFilmClick(film)}
+                  />
+                </div>
+              ))}
+          </div>
+        </div>
+        <div className="flex justify-center border-solid-[#dba902]">
+          <button
+            className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+          >
+            Trang Trước
+          </button>
+          {getPageNumbers().map((pageNumber) => (
+            <button
+              key={pageNumber}
+              disabled={pageNumber === "..."}
+              onClick={() => {
+                if (pageNumber !== "...") {
+                  goToPage(pageNumber);
+                }
+              }}
+              className={
+                "flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
+                (pageNumber === page
+                  ? "bg-[#dba902] text-black"
+                  : "bg-gray-800 text-white hidden md:block")
+              }
+            >
+              {pageNumber}
+            </button>
+          ))}
+          <button
+            className="flex-1 border-solid cursor-pointer p-3.5 m-6 rounded-md font-bold bg-gray-800 text-white relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page >= totalPages}
+          >
+            Trang Sau
+          </button>
+        </div>
     </div>
   );
 };

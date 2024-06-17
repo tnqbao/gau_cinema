@@ -1,3 +1,12 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /login/
+Disallow: /register/
+Disallow: /profile/
+Disallow: /settings/
+Disallow: /api/
+Disallow: /static/
+Disallow: /private/
+
+Sitemap: https://cuph.vercel.app/sitemap.xml

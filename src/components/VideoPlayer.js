@@ -9,15 +9,12 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Artplayer from "artplayer";
 import Hls from "hls.js";
+import { Helmet } from "react-helmet-async";
 import { GlobalContext } from "../context/GlobalContext";
 import EpisodesList from "./EpisodesList";
 
 function VideoPlayer() {
-  const {
-    DOMAIN_API,
-    handleEpisodeChange,
-    ep,
-  } = useContext(GlobalContext);
+  const { DOMAIN_API, handleEpisodeChange, ep } = useContext(GlobalContext);
 
   const { slug } = useParams();
   const location = useLocation();
@@ -62,15 +59,15 @@ function VideoPlayer() {
           ? response.data.data.item.episodes[0].server_data[0].link_m3u8
           : response.data.data.trailer_url;
 
-          if (videoLink) {
-            setVideoUrl(videoLink);
-            setError(null);
-          } else if (response.data.data.trailer_url) {
-            setVideoUrl(response.data.data.trailer_url);
-            setError(null);
-          } else {
-            setError("Video not found");
-          }
+      if (videoLink) {
+        setVideoUrl(videoLink);
+        setError(null);
+      } else if (response.data.data.trailer_url) {
+        setVideoUrl(response.data.data.trailer_url);
+        setError(null);
+      } else {
+        setError("Video not found");
+      }
     } catch (error) {
       if (error.response && error.response.status === 404) {
         setError("404 Not Found. Retrying...");
@@ -201,6 +198,9 @@ function VideoPlayer() {
 
   return (
     <div className="video-player">
+      <Helmet>
+        <title>{film.data.item.name + " - Tập " + ep}</title>
+      </Helmet>
       <h1 className="text-center justify-center font-bold text-amber-400 p-1 text-4xl mt-5">
         {film.data.item.name + " - Tập " + ep}
       </h1>

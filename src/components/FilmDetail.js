@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 import EpisodesList from "./EpisodesList";
 import { GlobalContext } from "../context/GlobalContext";
 
@@ -34,6 +35,27 @@ function FilmDetail() {
 
   return (
     <div className="flex gap-1">
+      <Helmet>
+        <title>{film.seoOnPage.titleHead}</title>
+        <meta name="description" content={film.seoOnPage.descriptionHead} />
+        <meta property="og:type" content={film.seoOnPage.og_type} />
+        <meta property="og:title" content={film.seoOnPage.titleHead} />
+        <meta
+          property="og:description"
+          content={film.seoOnPage.descriptionHead}
+        />
+        <meta
+          property="og:image"
+          content={`https://img.ophim.live/uploads/${film.seoOnPage.og_image[0]}`}
+        />
+        <meta
+          property="og:url"
+          content={`https://ophim16.cc/${film.seoOnPage.og_url}`}
+        />
+        <script type="application/ld+json">
+          {JSON.stringify(film.seoOnPage.seoSchema)}
+        </script>
+      </Helmet>
       <div className="max-w-[1400px] mx-auto px-4 md:px-8 bg-repeat bg-containe">
         <div className="progress hidden" style={{ width: "0%" }}>
           <b></b>

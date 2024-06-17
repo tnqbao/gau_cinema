@@ -7,24 +7,28 @@ import FilmDetail from "./components/FilmDetail";
 import VideoPlayer from "./components/VideoPlayer";
 import Footer from "./components/Footer";
 import { GlobalProvider } from "./context/GlobalContext";
+import { HelmetProvider } from "react-helmet-async";
 import "./App.css";
+import Home from "./components/Home";
 
 function App() {
   return (
     <GlobalProvider>
-      <div className="flex min-h-screen flex-col bg-[#121111]">
-        <Header />
-        <Navbar />
-        <ConditionalWrapper>
-          <Routes>
-            <Route path="/" element={<ListFilm />} />
-            <Route path="/:category" element={<ListFilm />} />
-            <Route path="/film/:slug" element={<FilmDetail />} />
-            <Route path="/movie/:slug/watch" element={<VideoPlayer />} />
-          </Routes>
-        </ConditionalWrapper>
-        <Footer />
-      </div>
+      <HelmetProvider>
+        <div className="flex min-h-screen flex-col bg-[#121111]">
+          <Header />
+          <Navbar />
+          <ConditionalWrapper>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/:category" element={<ListFilm />} />
+              <Route path="/film/:slug" element={<FilmDetail />} />
+              <Route path="/movie/:slug/watch" element={<VideoPlayer />} />
+            </Routes>
+          </ConditionalWrapper>
+          <Footer />
+        </div>
+      </HelmetProvider>
     </GlobalProvider>
   );
 }
@@ -33,7 +37,9 @@ const ConditionalWrapper = ({ children }) => {
   const location = useLocation();
   const isVideoPlayerRoute = location.pathname.startsWith("/movie/");
 
-  return <div className={isVideoPlayerRoute ? "" : "px-8 lg:px-16"}>{children}</div>;
+  return (
+    <div className={isVideoPlayerRoute ? "" : "px-8 lg:px-16"}>{children}</div>
+  );
 };
 
 export default App;
