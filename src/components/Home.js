@@ -37,7 +37,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>{"Cú Phim" - seoData.titleHead}</title>
+        <title>{"Cú Phim - Website xem phim trực tuyến chất lượng cao, " + <br>không quảng cáo</br> + ", đa dạng thể loại." + <br>Xem phim HD, phim VietSub, Phim Hoạt Hình</br> + "tại CUPHIM"}</title>
         <meta name="description" content={seoData.descriptionHead} />
         <meta property="og:type" content="website" />
         {seoData.og_image.map((image, index) => (
