@@ -73,10 +73,10 @@ const Navbar = () => {
         }`}
       >
         {categoryList.map((cate) => (
-          <li key={cate} className="top-menu-icon p-1">
+          <li key={cate} className="top-menu-icon">
             <div
               className={
-                "ml-5 block px-5 py-3 cursor-pointer text-center border-y-slate-500 text-xl hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
+                "ml-5 block p-5 cursor-pointer text-center border-y-slate-500 text-xl hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
                 (cate === category ? "bg-[#dba902] text-black" : "text-cyan-50")
               }
               onClick={() => handleCategoryClick(cate)}
