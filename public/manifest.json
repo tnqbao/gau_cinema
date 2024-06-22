@@ -1,6 +1,6 @@
 {
-  "short_name": "CÚ PHIM",
-  "name": "Xem Phim Vui Vẻ Tại Cú Phim",
+  "short_name": "Gấu Phim",
+  "name": "Xem Phim Vui Vẻ Tại Gấu Phim",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#dba902",
+  "theme_color": "#ffffff",
   "background_color": "#121111"
 }
