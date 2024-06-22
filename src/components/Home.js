@@ -37,7 +37,7 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>{"Cú Phim - Website xem phim trực tuyến chất lượng cao"}</title>
+        <title>{"Gấu Phim - Website xem phim trực tuyến chất lượng cao"}</title>
         <meta
           name="description"
           content="Phim cung cấp kho phim không quảng cáo, đa dạng thể loại. Xem phim HD, phim VietSub, Phim Hoạt Hình tại CUPHIM. Mọi thể loại"

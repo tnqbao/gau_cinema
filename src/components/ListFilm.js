@@ -178,7 +178,7 @@ const ListFilm = ({films}) => {
   return (
     <div className="bg-[#121111]">
     <Helmet>
-      <title>{category} - Cú Phim</title>
+      <title>{category} - Gấu Phim</title>
       <meta name="description" content={`Danh sách phim thuộc thể loại ${category}. Tìm phim mới nhất và phổ biến nhất trong thể loại này.`} />
     </Helmet>
         <br />

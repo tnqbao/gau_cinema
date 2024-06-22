@@ -66,7 +66,7 @@ const Header = () => {
     <div className="bg-[#1e2020] p-4 flex items-center justify-between border-2 border-y-yellow-500 border-x-[#1e2020] w-full">
       <div className="basis-1/3 md:basis-1/4 flex items-center">
         <div
-          className="bg-[url('https://i.imgur.com/F7Zqbq0.png')] w-16 h-16 md:w-24 md:h-24 bg-cover rounded-md border-2 border-yellow-500 cursor-pointer bg-center"
+          className="bg-[url('https://i.imgur.com/sACJNuE.png')] w-16 h-16 md:w-24 md:h-24 bg-cover rounded-md border-2 border-yellow-500 cursor-pointer bg-center"
           onClick={handleHomeClick}
         />
       </div>
