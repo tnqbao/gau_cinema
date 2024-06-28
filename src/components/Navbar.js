@@ -4,6 +4,7 @@ import CategoriesSelectMenu from "./CategoriesSelectMenu";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
   const { handleMenuSelect, category } = useContext(GlobalContext);
   const menuElementList = [
     "Phim Mới",
@@ -14,6 +15,7 @@ const Navbar = () => {
     "Vietsub",
     "TV Show",
     "Thể Loại",
+    "Quốc Gia"
   ];
 
   const handleDocumentClick = (e) => {
@@ -37,10 +39,9 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="relative ">
+      <div className="relative">
         <div
-          className={`bg-[#202020] text-white flex items-center justify-between border-2 border-[#1e2020]
-          }`}
+          className={`bg-[#202020] text-white flex items-center justify-between border-2 border-[#1e2020]`}
         >
           <ul
             id="top-menu"
@@ -50,10 +51,10 @@ const Navbar = () => {
           >
             {menuElementList.map((e) => (
               <li key={e} className="top-menu-icon">
-                {e !== "Thể Loại" ? (
+                {(e !== "Thể Loại" && e !== "Quốc Gia") ? (
                   <div
                     className={
-                      "ml-5 block p-5 cursor-pointer text-center border-y-slate-500 text-xl hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
+                      "ml-5 block p-5 cursor-pointer text-center border-y-slate-500 text-base hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
                       (category === e
                         ? "bg-[#dba902] text-black"
                         : "text-cyan-50")
@@ -67,8 +68,9 @@ const Navbar = () => {
                   </div>
                 ) : (
                   <div
-                    id="cate-button"
-                    className="text-slate-200 text-xl font-medium ml-5 flex gap-3 p-7 cursor-pointer text-center border-y-slate-500 hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+                    id={`${e.toLowerCase().replace(/\s+/g, '-')}-button`}
+                    className="text-slate-200 text-base font-medium ml-5 flex gap-3 p-7 cursor-pointer text-center border-y-slate-500 hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+                    onClick={() => setSelectedOption(e)}
                   >
                     {e}
                     <svg
@@ -128,7 +130,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      <CategoriesSelectMenu />
+      {selectedOption && (
+        <CategoriesSelectMenu option={selectedOption} setSelectedOption={setSelectedOption} />
+      )}
     </>
   );
 };

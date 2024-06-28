@@ -1,31 +1,38 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 
-const CategoriesSelectMenu = () => {
-  const { DOMAIN_API, getDataAPI, handleMenuSelect } =
-    useContext(GlobalContext);
-  const [categories, setCategories] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
+const CategoriesSelectMenu = ({ option, setSelectedOption }) => {
+  const { DOMAIN_API, getDataAPI, handleMenuSelect, setCategory } = useContext(GlobalContext);
+  const [items, setItems] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(true);
+
   useEffect(() => {
-    getDataAPI(`${DOMAIN_API}/v1/api/the-loai`, (data) => {
+    let apiEndpoint = `${DOMAIN_API}/v1/api/`;
+    if (option === "Thể Loại") {
+      apiEndpoint += "the-loai";
+    } else if (option === "Quốc Gia") {
+      apiEndpoint += "quoc-gia";
+    }
+
+    getDataAPI(apiEndpoint, (data) => {
       if (Array.isArray(data.data.items)) {
-        setCategories(data.data.items);
+        setItems(data.data.items);
       } else {
         console.error("Expected data to be an array", data);
       }
     });
-  }, [getDataAPI, DOMAIN_API]);
+  }, [getDataAPI, DOMAIN_API, option]);
 
   const handleDocumentClick = useCallback((e) => {
-    const cateList = document.getElementById("cate-list");
-    const cateButton = document.getElementById("cate-button");
+    const itemList = document.getElementById("item-list");
+    const button = document.getElementById(`${option.toLowerCase().replace(/\s+/g, '-')}-button`);
 
-    if (cateButton && cateButton.contains(e.target)) {
+    if (button && button.contains(e.target)) {
       setMenuOpen((prev) => !prev);
-    } else if (cateList && !cateList.contains(e.target)) {
+    } else if (itemList && !itemList.contains(e.target)) {
       setMenuOpen(false);
     }
-  }, []);
+  }, [option]);
 
   useEffect(() => {
     document.addEventListener("click", handleDocumentClick);
@@ -37,24 +44,25 @@ const CategoriesSelectMenu = () => {
   return (
     <div className="relative">
       <div
-        id="cate-list"
+        id="item-list"
         className={`absolute bg-[#202020] shadow-lg rounded-lg p-4 left-0 z-10 text-black ${
           menuOpen ? "" : "hidden"
         }`}
       >
         <div className="flex flex-wrap gap-4 justify-start">
-          {categories.map((category) => {
+          {items.map((item) => {
             return (
-              category.name !== "Phim 18+" && (
+              item.name !== "Phim 18+" && (
                 <div
-                  key={category._id}
+                  key={item._id}
                   className="px-2 py-3 hover:bg-gray-200 hover:text-black text-black cursor-pointer bg-white rounded-md border-zinc-800 text-medium font-bold"
                   onClick={() => {
-                    handleMenuSelect(category.slug);
+                    handleMenuSelect(item.slug, option);
                     setMenuOpen(false);
+                    setSelectedOption(null);
                   }}
                 >
-                  {category.name}
+                  {item.name}
                 </div>
               )
             );

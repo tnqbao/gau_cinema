@@ -36,6 +36,7 @@ export const GlobalProvider = ({ children }) => {
   const handleMenuSelect = (newCategory) => {
     setCategory(newCategory);
     setPage(1);
+
     const categoryURLs = {
       "Trang Chủ": `${DOMAIN_API}/v1/api/danh-sach/phim-le?page=1`,
       "Phim Mới": `${DOMAIN_API}/v1/api/danh-sach/phim-moi?page=1`,
@@ -50,25 +51,35 @@ export const GlobalProvider = ({ children }) => {
     const extractCategory = (url) => {
       const matchDs = url.match(/danh-sach\/(.*?)\?/);
       const matchTl = url.match(/the-loai\/(.*?)\?/);
+      const matchQG = url.match(/quoc-gia\/(.*?)\?/);
       if (matchDs) {
         return matchDs[1];
       }
       if (matchTl) {
         return matchTl[1];
       }
+      if (matchQG) {
+        return matchQG[1];
+      }
       return "";
     };
 
-    const url =
-      categoryURLs[newCategory] ||
-      `${DOMAIN_API}/v1/api/the-loai/${newCategory}?page=1`;
+    let url;
+    if (newCategory === "Thể Loại" || newCategory === "Quốc Gia") {
+      url = `${DOMAIN_API}/v1/api/${newCategory.toLowerCase()}/?page=1`;
+    } else {
+      url =
+        categoryURLs[newCategory] ||
+        `${DOMAIN_API}/v1/api/the-loai/${newCategory}?page=1`;
+    }
+
     setApiURL(url);
 
     if (newCategory === "Trang Chủ") {
       navigate("/");
     } else {
       const extractedCategory = extractCategory(url);
-      navigate("/danh-sach/" + extractedCategory);
+      navigate(`/danh-sach/${extractedCategory}`);
     }
   };
 
