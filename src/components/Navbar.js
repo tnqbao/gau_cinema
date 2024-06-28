@@ -1,51 +1,29 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
+import CategoriesSelectMenu from "./CategoriesSelectMenu";
 
 const Navbar = () => {
-  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { category, setCategory, handleCategorySelect } =
-    useContext(GlobalContext);
-
-  const categoryList = [
-    "Trang Chủ",
+  const { handleMenuSelect, category } = useContext(GlobalContext);
+  const menuElementList = [
     "Phim Mới",
     "Phim Lẻ",
     "Phim Bộ",
-    "Hoạt Hình",
-    "TV Show",
+    "Sắp Chiếu",
     "Thuyết Minh",
-    "Phim Vietsub",
-    "Lồng Tiếng",
-    "Phim Sắp Chiếu",
+    "Vietsub",
+    "TV Show",
+    "Thể Loại",
   ];
-
-  const handleCategoryClick = (selectedCategory) => {
-    handleCategorySelect(selectedCategory);
-    navigate(
-      selectedCategory === "Trang Chủ"
-        ? "/"
-        : `/${selectedCategory.replace(/\s+/g, "-").toLowerCase()}`
-    );
-    setCategory(selectedCategory === "Trang Chủ" ? null : selectedCategory);
-    setMenuOpen(false);
-    const topMenu = document.getElementById("top-menu");
-    if (topMenu) {
-      topMenu.classList.add("hidden");
-    }
-  };
 
   const handleDocumentClick = (e) => {
     const topMenu = document.getElementById("top-menu");
     const toggleTopMenuIcon = document.getElementById("toggleTopMenuIcon");
 
     if (toggleTopMenuIcon && toggleTopMenuIcon.contains(e.target)) {
-      if (topMenu) {
-        topMenu.classList.toggle("hidden");
-      }
+      setMenuOpen((prev) => !prev);
     } else if (topMenu && !topMenu.contains(e.target)) {
-      topMenu.classList.add("hidden");
+      setMenuOpen(false);
     }
   };
 
@@ -57,69 +35,101 @@ const Navbar = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const topMenu = document.getElementById("top-menu");
-    if (topMenu) {
-      topMenu.classList.add("hidden");
-    }
-  }, []);
-
   return (
-    <div className="relative flex gap-5 justify-between items-center bg-[#202020] w-full">
-      <ul
-        id="top-menu"
-        className={`lg:flex items-center gap-y-3 gap-x-1 flex-wrap ${
-          menuOpen ? "flex" : "hidden"
-        }`}
-      >
-        {categoryList.map((cate) => (
-          <li key={cate} className="top-menu-icon">
-            <div
-              className={
-                "ml-5 block p-5 cursor-pointer text-center border-y-slate-500 text-xl hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
-                (cate === category ? "bg-[#dba902] text-black" : "text-cyan-50")
-              }
-              onClick={() => handleCategoryClick(cate)}
-            >
-              {cate}
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div id="toggleTopMenuIcon" className="lg:hidden p-5 hover:bg-[#2c3f3b]">
-          {menuOpen ? (
-       <svg
-       xmlns="http://www.w3.org/2000/svg"
-       fill="none"
-       viewBox="0 0 24 24"
-       strokeWidth="3"
-       stroke="currentColor"
-       className="w-6 h-6 text-white cursor-pointer"
-     >
-       <path
-         strokeLinecap="round"
-         strokeLinejoin="round"
-         d="M6 18L18 6M6 6l12 12"
-       />
-     </svg>
-   ) : (
-     <svg
-       xmlns="http://www.w3.org/2000/svg"
-       fill="none"
-       viewBox="0 0 24 24"
-       strokeWidth="3"
-       stroke="currentColor"
-       className="w-6 h-6 text-white cursor-pointer"
-     >
-       <path
-         strokeLinecap="round"
-         strokeLinejoin="round"
-         d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-       />
-     </svg>
-      )}
+    <>
+      <div className="relative ">
+        <div
+          className={`bg-[#202020] text-white flex items-center justify-between border-2 border-[#1e2020]
+          }`}
+        >
+          <ul
+            id="top-menu"
+            className={`lg:flex items-center gap-y-3 gap-x-1 flex-wrap list-none ml-5 ${
+              menuOpen ? "flex" : "hidden"
+            }`}
+          >
+            {menuElementList.map((e) => (
+              <li key={e} className="top-menu-icon">
+                {e !== "Thể Loại" ? (
+                  <div
+                    className={
+                      "ml-5 block p-5 cursor-pointer text-center border-y-slate-500 text-xl hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300 " +
+                      (category === e
+                        ? "bg-[#dba902] text-black"
+                        : "text-cyan-50")
+                    }
+                    onClick={() => {
+                      handleMenuSelect(e);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    {e}
+                  </div>
+                ) : (
+                  <div
+                    id="cate-button"
+                    className="text-slate-200 text-xl font-medium ml-5 flex gap-3 p-7 cursor-pointer text-center border-y-slate-500 hover:bg-[#2c3f3b] relative after:absolute after:bottom-0 after:left-0 after:bg-slate-700 after:h-0.5 after:w-0 hover:after:w-full after:transition-all after:duration-300"
+                  >
+                    {e}
+                    <svg
+                      className="self-end w-6 h-6 hover:text-stone-300"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
+                      />
+                    </svg>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+          <div
+            id="toggleTopMenuIcon"
+            className="lg:hidden p-5 hover:bg-[#2c3f3b]"
+          >
+            {menuOpen ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="3"
+                stroke="currentColor"
+                className="w-6 h-6 text-white cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="3"
+                stroke="currentColor"
+                className="w-6 h-6 text-white cursor-pointer"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                />
+              </svg>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+      <CategoriesSelectMenu />
+    </>
   );
 };
 

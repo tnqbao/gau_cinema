@@ -47,7 +47,7 @@ const FilmSlider = ({ categoryTitle, films = [], onFilmClick }) => {
       });
     };
 
-    intervalRef.current = setInterval(nextSlide, 10000);
+    intervalRef.current = setInterval(nextSlide, 1000000);
 
     return () => clearInterval(intervalRef.current);
   }, [filmsPerPage, films.length]);

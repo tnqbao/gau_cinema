@@ -68,6 +68,7 @@ const Header = () => {
         <div
           className="bg-[url('https://i.imgur.com/aMY5YTJ.png')] w-16 h-16 md:w-24 md:h-24 bg-cover rounded-md border-2 border-yellow-500 cursor-pointer bg-center"
           onClick={handleHomeClick}
+          title=""
         />
       </div>
       <div

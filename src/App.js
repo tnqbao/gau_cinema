@@ -10,7 +10,7 @@ import VideoPlayer from "./components/VideoPlayer";
 import Footer from "./components/Footer";
 import { GlobalProvider } from "./context/GlobalContext";
 import "./App.css";
-import Home from "./components/Home";
+
 
 function App() {
   return (
@@ -21,8 +21,8 @@ function App() {
           <Navbar />
           <ConditionalWrapper>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/:category" element={<ListFilm />} />
+              <Route path="/" element={<ListFilm />} />
+              <Route path="danh-sach/:category" element={<ListFilm />} />
               <Route path="/film/:slug" element={<FilmDetail />} />
               <Route path="/movie/:slug/watch" element={<VideoPlayer />} />
             </Routes>

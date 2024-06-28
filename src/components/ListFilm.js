@@ -16,6 +16,7 @@ const ListFilm = ({films}) => {
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
   const windowSize = useWindowSize();
+  const [titlePage, setTitlePage] = useState('');
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -28,6 +29,7 @@ const ListFilm = ({films}) => {
         Array.isArray(response.data.data.items)
       ) {
         setFilmList(response.data.data.items);
+        setTitlePage(response.data.data.titlePage)
         setTotalPages(
           Math.ceil(
             response.data.data.params.pagination.totalItems /
@@ -102,7 +104,7 @@ const ListFilm = ({films}) => {
 
   const handleFilmClick = useCallback(
     (film) => {
-      navigate(`/film/${film.slug}`);
+      navigate(`/phim/${film.slug}`);
     },
     [navigate]
   );
@@ -184,7 +186,7 @@ const ListFilm = ({films}) => {
         <br />
         <br />
         <h1 className="font-bold text-center text-zinc-50 text-4xl">
-          {category}
+        {titlePage && String(titlePage).toUpperCase()}
         </h1>
         <br />
         <div className="flex justify-center border-solid-[#dba902]">
