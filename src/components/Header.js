@@ -28,7 +28,7 @@ const Header = () => {
 
   const handleCategoryClick = () => {
     handleCategorySearch(searchTerm);
-    navigate(`/${searchTerm.replace(/\s+/g, "-").toLowerCase()}`);
+    navigate(`/danh-sach/${searchTerm.replace(/\s+/g, "-").toLowerCase()}`);
   };
 
   const handleHomeClick = () => {
