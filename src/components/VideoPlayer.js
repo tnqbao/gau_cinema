@@ -201,10 +201,15 @@ function VideoPlayer() {
       <Helmet>
         <title>{film.data.item.name + " - Tập " + ep}</title>
       </Helmet>
-      <h1 className="text-center justify-center font-bold text-amber-400 p-1 text-4xl mt-5">
-        {film.data.item.name + " - Tập " + ep}
+      <h1 className="text-center justify-center font-bold text-amber-400 p-1 text-4xl mt-52">
+        {film.data.item.name +
+          " - Tập " +
+          (Array.isArray(film.data.item.episodes?.server_data) &&
+          film.data.item.episodes.server_data.length <= 1
+            ? "Full"
+            : ep)}
       </h1>
-      <div className="relative w-full pt-[56.25%] flex justify-center p-5">
+      <div className="relative w-full pt-[56.25%] flex justify-center p-5 mt-16">
         <div
           ref={playerRef}
           className="absolute inset-0 w-full h-full lg:p-9"

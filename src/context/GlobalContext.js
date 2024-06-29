@@ -33,7 +33,7 @@ export const GlobalProvider = ({ children }) => {
     setApiURL(url);
   };
 
-  const handleMenuSelect = (newCategory) => {
+  const handleMenuSelect = (newCategory, option) => {
     setCategory(newCategory);
     setPage(1);
 
@@ -65,14 +65,22 @@ export const GlobalProvider = ({ children }) => {
     };
 
     let url;
-    if (newCategory === "Thể Loại" || newCategory === "Quốc Gia") {
-      url = `${DOMAIN_API}/v1/api/${newCategory.toLowerCase()}/?page=1`;
+
+    if (option === "Thể Loại" || option === "Quốc Gia") {
+      let apiEndpoint = `${DOMAIN_API}/v1/api/`;
+      if (option === "Thể Loại") {
+        apiEndpoint += `the-loai/${newCategory}?page=1`;
+      } else if (option === "Quốc Gia") {
+        apiEndpoint += `quoc-gia/${newCategory}?page=1`;
+      }
+      url = apiEndpoint;
     } else {
       url =
         categoryURLs[newCategory] ||
         `${DOMAIN_API}/v1/api/the-loai/${newCategory}?page=1`;
     }
 
+    console.log(url);
     setApiURL(url);
 
     if (newCategory === "Trang Chủ") {
