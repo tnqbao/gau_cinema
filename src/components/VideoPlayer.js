@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useCallback,
-  useContext,
-} from "react";
+import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Artplayer from "artplayer";
@@ -130,7 +124,7 @@ function VideoPlayer() {
             index: 15,
             position: "left",
             html: `<svg height="100%" version="1.1" viewBox="0 0 36 36" width="100%"><use class="ytp-svg-shadow" xlink:href="#ytp-id-13"></use><path class="ytp-svg-fill" d="M 12,24 20.5,18 12,12 V 24 z M 22,12 v 12 h 2 V 12 h -2 z" id="ytp-id-13"></path></svg>`,
-            tooltip: "Next Episode",
+            tooltip: "Tập Tiếp Theo",
             style: {
               color: "white",
             },
@@ -159,22 +153,36 @@ function VideoPlayer() {
 
       art.on("ready", () => {
         console.info("ArtPlayer is ready");
+        art.layers.add({
+          name: "poster",
+          html: `<button style="border-radius: 0.5rem; background: rgba(255, 255, 255, 0.3); border: none; font-size: 1.5rem; padding: 0.5rem 1rem; width: 16rem;">Bỏ qua giới thiệu</button>`,
+          tooltip: "Bỏ qua giới thiệu",
+          style: {
+            position: "absolute",
+            left: "2",
+            bottom: "6rem",
+            backgroundColor: "transparent",
+            width: "9rem",
+            paddingInline: "2rem",
+          },
+          click: function (...args) {
+            art.currentTime = 90;
+            art.layers.remove("poster");
+          },
+          mounted: function (...args) {
+            console.info("mounted", args);
+          },
+        });
+        setTimeout(() => {
+          art.layers.remove("poster");
+        }, 60000);
       });
 
       return () => {
         art.destroy(true);
       };
     }
-  }, [
-    videoUrl,
-    slug,
-    episode,
-    server,
-    navigate,
-    playM3u8,
-    film,
-    handleEpisodeChange,
-  ]);
+  }, [videoUrl, slug, episode, server, navigate, playM3u8, film, handleEpisodeChange]);
 
   if (loading) {
     return (
