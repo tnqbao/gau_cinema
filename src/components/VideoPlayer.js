@@ -155,11 +155,11 @@ function VideoPlayer() {
         console.info("ArtPlayer is ready");
         art.layers.add({
           name: "poster",
-          html: `<button style="border-radius: 0.5rem; background: rgba(255, 255, 255, 0.3); border: none; font-size: 1.5rem; padding: 0.5rem 1rem; width: 16rem;">Bỏ qua giới thiệu</button>`,
+          html: `<button style="border-radius: 0.25rem; background: rgba(26, 23, 23, 0.7); border: none; font-size: 1.5rem; padding: 0.75rem 1.25rem; width: 16rem;">Bỏ qua giới thiệu</button>`,
           tooltip: "Bỏ qua giới thiệu",
           style: {
             position: "absolute",
-            left: "2",
+            right: "12rem",
             bottom: "6rem",
             backgroundColor: "transparent",
             width: "9rem",
