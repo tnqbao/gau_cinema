@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@tailwindcss/aspect-ratio;
 
 body {
   margin: 0;
@@ -26,3 +25,4 @@ html, body, #root, .App {
   min-height: 100%;
   background-color: #121111;
 }
+

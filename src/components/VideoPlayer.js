@@ -152,10 +152,9 @@ function VideoPlayer() {
       artRef.current = art;
 
       art.on("ready", () => {
-        console.info("ArtPlayer is ready");
         art.layers.add({
           name: "poster",
-          html: `<button style="border-radius: 0.25rem; background: rgba(26, 23, 23, 0.7); border: none; font-size: 1.5rem; padding: 0.75rem 1.25rem; width: 16rem;">Bỏ qua giới thiệu</button>`,
+          html: `<button class="hidden md:block" style="border-radius: 0.25rem; background: rgba(26, 23, 23, 0.7); border: none; font-size: 1.5rem; padding: 0.75rem 1.25rem; width: 16rem;">Bỏ qua giới thiệu</button>`,
           tooltip: "Bỏ qua giới thiệu",
           style: {
             position: "absolute",
@@ -186,8 +185,8 @@ function VideoPlayer() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center p-52">
-        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+      <div className="flex justify-center items-center">
+        <h1 className="text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           Loading...
         </h1>
       </div>
@@ -196,8 +195,8 @@ function VideoPlayer() {
 
   if (error && !videoUrl) {
     return (
-      <div className="flex justify-center items-center p-52">
-        <h1 className="text-3xl animate-puls font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
+      <div className="flex justify-center items-center">
+        <h1 className="text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           Phim Chưa Cập Nhật
         </h1>
       </div>
