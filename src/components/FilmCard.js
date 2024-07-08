@@ -5,7 +5,7 @@ const FilmCard = ({ film }) => {
   const navigate = useNavigate();
 
   const handleFilmClick = () => {
-    navigate(`/film/${film.slug}`);
+    navigate(`/phim/${film.slug}`);
   };
 
   const nameLength = film.name.length;

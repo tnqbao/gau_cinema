@@ -10,6 +10,7 @@ const Navbar = () => {
     "Phim Mới",
     "Phim Lẻ",
     "Phim Bộ",
+    "Hoạt Hình",
     "Sắp Chiếu",
     "Thuyết Minh",
     "Vietsub",

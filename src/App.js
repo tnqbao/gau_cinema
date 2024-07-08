@@ -23,8 +23,8 @@ function App() {
             <Routes>
               <Route path="/" element={<ListFilm />} />
               <Route path="danh-sach/:category" element={<ListFilm />} />
-              <Route path="/film/:slug" element={<FilmDetail />} />
-              <Route path="/movie/:slug/watch" element={<VideoPlayer />} />
+              <Route path="/phim/:slug" element={<FilmDetail />} />
+              <Route path="/phim/:slug/xem-phim" element={<VideoPlayer />} />
             </Routes>
           </ConditionalWrapper>
           <SpeedInsights/>

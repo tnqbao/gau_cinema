@@ -42,6 +42,7 @@ export const GlobalProvider = ({ children }) => {
       "Phim Mới": `${DOMAIN_API}/v1/api/danh-sach/phim-moi?page=1`,
       "Phim Lẻ": `${DOMAIN_API}/v1/api/danh-sach/phim-le?page=1`,
       "Phim Bộ": `${DOMAIN_API}/v1/api/danh-sach/phim-bo?page=1`,
+      "Hoạt Hình": `${DOMAIN_API}/v1/api/danh-sach/hoat-hinh?page=1`,
       "Sắp Chiếu": `${DOMAIN_API}/v1/api/danh-sach/phim-sap-chieu?page=1`,
       "Thuyết Minh": `${DOMAIN_API}/v1/api/danh-sach/phim-thuyet-minh?page=1`,
       Vietsub: `${DOMAIN_API}/v1/api/danh-sach/phim-vietsub?page=1`,
@@ -119,7 +120,7 @@ export const GlobalProvider = ({ children }) => {
       localStorage.setItem("watchedEpisodes", JSON.stringify(watchedEpisodes));
       setViewedEpisodes(watchedEpisodes);
       setEpisode(episode);
-      navigate(`/movie/${slug}/watch?ep=${episode}&server=${server}`);
+      navigate(`/phim/${slug}/xem-phim?ep=${episode}&server=${server}`);
     },
     [navigate]
   );

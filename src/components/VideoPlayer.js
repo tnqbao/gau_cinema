@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback, useContext } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useContext,
+} from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Artplayer from "artplayer";
@@ -152,6 +158,8 @@ function VideoPlayer() {
       artRef.current = art;
 
       art.on("ready", () => {
+        console.log("Artplayer is ready");
+
         art.layers.add({
           name: "poster",
           html: `<button class="hidden md:block" style="border-radius: 0.25rem; background: rgba(26, 23, 23, 0.7); border: none; font-size: 1.5rem; padding: 0.75rem 1.25rem; width: 16rem;">Bỏ qua giới thiệu</button>`,
@@ -169,11 +177,15 @@ function VideoPlayer() {
             art.layers.remove("poster");
           },
           mounted: function (...args) {
-            console.info("mounted", args);
+            console.info("Layer mounted", args);
           },
         });
+
         setTimeout(() => {
-          art.layers.remove("poster");
+          const posterLayer = art.layers.find(layer => layer.name === "poster");
+          if (posterLayer) {
+            art.layers.remove("poster");
+          }
         }, 60000);
       });
 
@@ -181,11 +193,20 @@ function VideoPlayer() {
         art.destroy(true);
       };
     }
-  }, [videoUrl, slug, episode, server, navigate, playM3u8, film, handleEpisodeChange]);
+  }, [
+    videoUrl,
+    slug,
+    episode,
+    server,
+    navigate,
+    playM3u8,
+    film,
+    handleEpisodeChange,
+  ]);
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center p-52">
         <h1 className="text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           Loading...
         </h1>
@@ -195,7 +216,7 @@ function VideoPlayer() {
 
   if (error && !videoUrl) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center p-52">
         <h1 className="text-3xl font-bold bg-clip-text bg-gradient-to-r from-red-500 to-blue-500 text-slate-200">
           Phim Chưa Cập Nhật
         </h1>
