@@ -51,12 +51,12 @@ function VideoPlayer() {
       const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
       setFilm(response.data);
       const videoLink =
-        response.data.data.item.episodes[0].server_data.length > 1
-          ? response.data.data.item.episodes[0].server_data.find(
+        response.data.data.item.episodes[0].server_data[server].length > 1
+          ? response.data.data.item.episodes[0].server_data[server].find(
               (ep) => ep.name === episode
             ).link_m3u8
-          : response.data.data.item.episodes[0].server_data[0].name.length > 0
-          ? response.data.data.item.episodes[0].server_data[0].link_m3u8
+          : response.data.data.item.episodes[0].server_data[server].name.length > 0
+          ? response.data.data.item.episodes[0].server_data[server].link_m3u8
           : response.data.data.trailer_url;
 
       if (videoLink) {
@@ -78,7 +78,7 @@ function VideoPlayer() {
     } finally {
       setLoading(false);
     }
-  }, [DOMAIN_API, slug, episode]);
+  }, [DOMAIN_API, slug, episode, server]);
 
   useEffect(() => {
     fetchFilm();
@@ -182,9 +182,11 @@ function VideoPlayer() {
         });
 
         setTimeout(() => {
-          const posterLayer = art.layers.find(layer => layer.name === "poster");
-          if (posterLayer) {
-            art.layers.remove("poster");
+          const posterLayerIndex = art.layers.findIndex(
+            (layer) => layer.name === "poster"
+          );
+          if (posterLayerIndex !== -1) {
+            art.layers.remove(posterLayerIndex);
           }
         }, 60000);
       });
