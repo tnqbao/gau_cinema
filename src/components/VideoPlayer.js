@@ -51,12 +51,12 @@ function VideoPlayer() {
       const response = await axios.get(`${DOMAIN_API}/v1/api/phim/${slug}`);
       setFilm(response.data);
       const videoLink =
-        response.data.data.item.episodes[0].server_data[server].length > 1
-          ? response.data.data.item.episodes[0].server_data[server].find(
+        response.data.data.item.episodes[0].server_data.length > 1
+          ? response.data.data.item.episodes[0].server_data.find(
               (ep) => ep.name === episode
             ).link_m3u8
-          : response.data.data.item.episodes[0].server_data[server].name.length > 0
-          ? response.data.data.item.episodes[0].server_data[server].link_m3u8
+          : response.data.data.item.episodes[0].server_data[0].name.length > 0
+          ? response.data.data.item.episodes[0].server_data[0].link_m3u8
           : response.data.data.trailer_url;
 
       if (videoLink) {
@@ -78,7 +78,7 @@ function VideoPlayer() {
     } finally {
       setLoading(false);
     }
-  }, [DOMAIN_API, slug, episode, server]);
+  }, [DOMAIN_API, slug, episode]);
 
   useEffect(() => {
     fetchFilm();
