@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
-import ListFilm from "./ListFilm";
+import ListFilm from "./unit_components/ListFilm";
+import Login from "./auth_components/Login"
 
 const Home = () => {
   const [films, setFilms] = useState([]);
@@ -40,14 +41,14 @@ const Home = () => {
         <title>{"Gấu Phim - Website xem phim trực tuyến chất lượng cao"}</title>
         <meta
           name="description"
-          content="Phim cung cấp kho phim không quảng cáo, đa dạng thể loại. Xem phim HD, phim VietSub, Phim Hoạt Hình tại CUPHIM. Mọi thể loại"
+          content="Phim cung cấp kho phim không quảng cáo, đa dạng thể loại. Xem phim HD, phim VietSub, Phim Hoạt Hình tại GẤU. Mọi thể loại"
         />
         <meta property="og:type" content="website" />
         {seoData.og_image.map((image, index) => (
           <meta property="og:image" content={image} key={index} />
         ))}
       </Helmet>
-      <ListFilm films={films}></ListFilm>
+        <Login></Login>
     </>
   );
 };

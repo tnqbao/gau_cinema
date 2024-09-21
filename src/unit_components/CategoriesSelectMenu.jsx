@@ -57,7 +57,7 @@ const CategoriesSelectMenu = ({ option, setSelectedOption }) => {
       >
         <div className="flex flex-wrap gap-4 justify-start">
           {items.map((item) => (
-            item.name !== "Phim 18++" && (
+            item.name !== "Phim 18+" && (
               <div
                 key={item._id}
                 className="w-36 h-10 flex items-center justify-center hover:bg-gray-200 hover:text-black text-black cursor-pointer bg-white rounded-md border-zinc-800 text-medium font-bold"
