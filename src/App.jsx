@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
-import { SpeedInsights } from "@vercel/speed-insights/react";
 import Navbar from "./unit_components/Navbar";
 import Header from "./header/Header";
 import ListFilm from "./unit_components/ListFilm";
