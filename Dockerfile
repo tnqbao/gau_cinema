@@ -12,6 +12,3 @@ COPY . .
 
 RUN npm run build
 
-RUN rm -rf node_modules
-
-CMD ["npm", "start"]
