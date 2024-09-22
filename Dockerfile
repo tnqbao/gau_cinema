@@ -6,9 +6,12 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
 RUN npm run build
 
+RUN rm -rf node_modules && npm install --only=production --legacy-peer-deps
+
+CMD ["npm", "start"]
